@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project>
+
+<project name="kelvin" default="package" xmlns:ivy="antlib:org.apache.ivy.ant">
+
+	<taskdef resource="net/sf/antcontrib/antlib.xml"/>
+
+	<exec executable="svnversion" outputproperty="svnversion-temp" />
+	<propertyregex property="svnversion" input="${svnversion-temp}" regexp=":" replace="-"/>
+	
+	<property name="ivy.cache" location="${user.home}/.ivy2"/>
+	<property name="lib" location="${basedir}/lib"/>
+
+	<property name="src" location="${basedir}/src"/>
+	<property name="src.main.java" location="${src}/main/java"/>
+	<property name="src.main.resources" location="${src}/main/resources"/>
+
+	<property name="target" location="${basedir}/target"/>
+	<property name="target.main" location="${target}/main/classes"/>
+
+	<property name="kelvin.jar" location="${target}/kelvin-${svnversion}.jar"/>
+
+	<path id="libs.main">
+		<fileset dir="${lib}">
+			<include name="**/*.jar"/>
+		</fileset>
+	</path>
+
+	<target name="init">
+		<mkdir dir="${target.main}"/>
+		<tstamp>
+			<format property="DSTAMP" pattern="yyyyMMdd"/>
+			<format property="TSTAMP" pattern="HHmmss"/>
+		</tstamp>
+		<tstamp>
+			<format property="tstamp.build" pattern="dd.MM.yyyy HH:mm"/>
+		</tstamp>
+	</target>
+
+	<target name="compile.main" depends="init">
+		<javac
+			includeantruntime="false"
+			srcdir="${src.main.java}"
+			destdir="${target.main}"
+			classpathref="libs.main"
+			debug="on"
+			debuglevel="lines,vars,source"
+			encoding="UTF8"/>
+	</target>
+
+	<target name="package.main" depends="compile.main">
+		<jar destfile="${kelvin.jar}">
+			<zipfileset dir="${target.main}">
+				<include name="**"/>
+			</zipfileset>
+			<zipfileset dir="${src.main.resources}">
+				<include name="kelvin.xml"/>
+			</zipfileset>
+		</jar>
+	</target>
+
+	<target name="package" depends="package.main"/>
+
+	<target name="clean">
+		<delete dir="${target}"/>
+		<delete dir="${lib}"/>
+	</target>
+
+	<target name="clean-ivy">
+		<delete dir="${ivy.cache}"/>
+	</target>
+
+</project>

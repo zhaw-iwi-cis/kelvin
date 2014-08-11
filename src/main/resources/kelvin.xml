@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project>
+
+<project name="kelvin" xmlns:ivy="antlib:org.apache.ivy.ant">
+
+	<taskdef resource="net/sf/antcontrib/antlib.xml"/>
+	<taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask" classpath="/opt/local/share/java/apache-ant/lib/ant-junit.jar"/>
+
+	<exec executable="svnversion" outputproperty="svnversion-temp" />
+	<propertyregex property="svnversion" input="${svnversion-temp}" regexp=":" replace="-"/>
+
+	<property name="ivy.cache" location="${user.home}/.ivy2"/>
+	<property name="lib" location="${basedir}/lib"/>
+
+	<property name="src" location="${basedir}/src"/>
+	<property name="src.main.java" location="${src}/main/java"/>
+	<property name="src.main.resources" location="${src}/main/resources"/>
+	<property name="src.test.java" location="${src}/test/java"/>
+	<property name="src.test.resources" location="${src}/test/resources"/>
+
+	<property name="target" location="${basedir}/target"/>
+	<property name="target.main" location="${target}/main/classes"/>
+	<property name="target.test" location="${target}/test/classes"/>
+	<property name="target.reports" location="${target}/reports"/>
+	<property name="target.javadoc" location="${target}/javadoc"/>
+
+	<property name="app.jar" location="${target}/${ant.project.name}-${svnversion}.jar"/>
+	<property name="app-test.jar" location="${target}/${ant.project.name}-test-${svnversion}.jar"/>
+	<property name="app-release.tar" location="${target}/${ant.project.name}-release-${svnversion}.tar"/>
+	<property name="app-release.tar.gz" location="${target}/${ant.project.name}-release-${svnversion}.tar.gz"/>
+	
+	<path id="kelvin.libs.main">
+		<fileset dir="${lib}">
+			<include name="**/*.jar"/>
+		</fileset>
+	</path>
+
+	<path id="kelvin.libs.test">
+		<path refid="libs.main"/>
+		<pathelement location="${app.jar}"/>
+		<pathelement location="${app-test.jar}"/>
+	</path>
+	
+	<target name="init-libs">
+		<if>
+			<available file="${lib}/INIT-LIBS-FLAG"/>
+			<else>
+				<touch file="${lib}/INIT-LIBS-FLAG"/>
+				<ivy:retrieve pattern="${lib}/[artifact].[ext]"/>
+				<exec executable="deflector">
+					<arg line="-jar ${java.home}/lib/rt.jar"/>
+					<arg line="-includes java\..* javax\..* org\.ietf\..* org\.omg\..* org\.w3c\..* org\.xml\..*"/>
+					<arg line="-excludes javax\.smartcardio\..* org\.omg\.stub\.javax\..* java\.awt\.peer\..*"/>
+					<arg line="-output ${lib}"/>
+				</exec>
+				<exec executable="deflector">
+					<arg line="-jar ${lib}/javax.servlet-api.jar"/>
+					<arg line="-classpath ${lib}/__rt.jar"/>
+					<arg line="-output ${lib}"/>
+				</exec>
+				<exec executable="deflector">
+					<arg line="-jar ${lib}/derby.jar"/>
+					<arg line="-classpath ${lib}/__rt.jar"/>
+					<arg line="-includes org\.apache\.derby\.agg\..* org\.apache\.derby\.authentication\..* org\.apache\.derby\.catalog\..* org\.apache\.derby\.jdbc\..* org\.apache\.derby\.mbeans\..* org\.apache\.derby\.security\..* org\.apache\.derby\.tools\..* org\.apache\.derby\.vti\..* org\.apache\.derby\.iapi\.error\..*"/>
+					<arg line="-output ${lib}"/>
+				</exec>
+				<exec executable="deflector">
+					<arg line="-jar ${lib}/derbynet.jar"/>
+					<arg line="-classpath ${lib}/__rt.jar:${lib}/__javax.servlet-api.jar:${lib}/javax.servlet-api.jar"/>
+					<arg line="-includes org\.apache\.derby\.drda\..* org\.apache\.derby\.mbeans\..*"/>
+					<arg line="-output ${lib}"/>
+				</exec>
+				<exec executable="deflector">
+					<arg line="-jar ${lib}/jetty-server.jar"/>
+					<arg line="-classpath ${lib}/__rt.jar:${lib}/__javax.servlet-api.jar:${lib}/javax.servlet-api.jar:${lib}/jetty-http.jar:${lib}/jetty-util.jar:${lib}/jetty-io.jar"/>
+					<arg line="-includes org\.eclipse\.jetty\.server\..*"/>
+					<arg line="-excludes .*\.jmx\..*"/>
+					<arg line="-output ${lib}"/>
+				</exec>
+				<exec executable="deflector">
+					<arg line="-jar ${lib}/jetty-util.jar"/>
+					<arg line="-classpath ${lib}/__rt.jar:${lib}/slf4j-api.jar:${lib}/__javax.servlet-api.jar:${lib}/javax.servlet-api.jar"/>
+					<arg line="-includes org\.eclipse\.jetty\.util\..*"/>
+					<arg line="-excludes .*\.jmx\..*"/>
+					<arg line="-output ${lib}"/>
+				</exec>
+				<exec executable="deflector">
+					<arg line="-javaVersion 1.4"/>
+					<arg line="-jar ${lib}/commons-lang.jar"/>
+					<arg line="-classpath ${lib}/__rt.jar"/>
+					<arg line="-includes org\.apache\.commons\.lang\..*"/>
+					<arg line="-keepIntermediate true"/>
+					<arg line="-output ${lib}"/>
+				</exec>
+				<exec executable="deflector">
+					<arg line="-jar ${lib}/commons-configuration.jar"/>
+					<arg line="-classpath ${lib}/__rt.jar:${lib}/commons-logging.jar:${lib}/commons-beanutils.jar:${lib}/commons-collections.jar:${lib}/commons-digester.jar:${lib}/commons-jexl.jar:${lib}/commons-vfs2.jar:${lib}/xml-resolver.jar:${lib}/commons-jxpath.jar:${lib}/__javax.servlet-api.jar:${lib}/javax.servlet-api.jar:${lib}/__commons-lang.jar:${lib}/commons-lang.jar"/>
+					<arg line="-includes org\.apache\.commons\.configuration\..*"/>
+					<arg line="-output ${lib}"/>
+				</exec>
+				<!-- We are deleting these libs here because they are not actually needed to
+				     execute the application; their purpose is mostly to satisfy deflector
+				     dependencies. -->
+				<delete>
+					<zipfileset dir="${lib}">
+						<include name="commons-vfs2.jar"/>
+						<include name="commons-beanutils.jar"/>
+						<include name="commons-digester.jar"/>
+						<include name="commons-jexl.jar"/>
+						<include name="commons-jxpath.jar"/>
+						<include name="maven-scm-api.jar"/>
+						<include name="maven-scm-provider-svn-commons.jar"/>
+						<include name="maven-scm-provider-svnexe.jar"/>
+						<include name="plexus-utils.jar"/>
+						<include name="regexp.jar"/>
+						<include name="xml-resolver.jar"/>
+					</zipfileset>
+				</delete>
+			</else>
+		</if>
+	</target>
+	
+	<target name="init" depends="init-libs">
+		<mkdir dir="${target.main}"/>
+		<mkdir dir="${target.test}"/>
+		<mkdir dir="${target.reports}"/>
+		<mkdir dir="${target.javadoc}"/>
+
+		<tstamp>
+			<format property="DSTAMP" pattern="yyyyMMdd"/>
+			<format property="TSTAMP" pattern="HHmmss"/>
+		</tstamp>
+		<tstamp>
+			<format property="tstamp.build" pattern="dd.MM.yyyy HH:mm"/>
+		</tstamp>
+		<if>
+			<equals arg1="${debug}" arg2="true"/>
+			<then>
+				<property name="debug.arg"
+			value="-agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=y"/>
+			</then>
+			<else>
+				<property name="debug.arg" value=""/>
+			</else>
+		</if>
+		<if>
+			<equals arg1="${profile}" arg2="true"/>
+			<then>
+				<property name="profile.arg"
+			value="-agentpath:/Applications/jprofiler7/bin/macos/libjprofilerti.jnilib"/>
+			</then>
+			<else>
+				<property name="profile.arg" value=""/>
+			</else>
+		</if>
+	</target>
+
+</project>
