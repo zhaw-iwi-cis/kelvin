@@ -39,7 +39,6 @@ import __java.net.__URI;
 import __java.util.logging.__FileHandler;
 import __org.apache.derby.drda.__NetworkServerControl;
 import __org.eclipse.jetty.util.component.__AbstractLifeCycle;
-import ch.zhaw.iwi.cis.kelvin.KelvinConfig;
 import ch.zhaw.iwi.cis.kelvin.framework.service.ServiceRegistry;
 import ch.zhaw.iwi.cis.kelvin.restservice.RestService;
 
@@ -99,7 +98,7 @@ public class KelvinEngine
 	{
 		Formatter formatter = new XMLFormatter();
 		
-		FileHandler cleantechHandler = __FileHandler.__new( KelvinConfig.getLogDir() + "/cleantech.log" );
+		FileHandler cleantechHandler = __FileHandler.__new( KelvinConfig.getConfig().getLogDir() + "/application.log" );
 		cleantechHandler.setLevel( Level.INFO );
 		cleantechHandler.setFormatter( formatter );
 		
@@ -111,7 +110,7 @@ public class KelvinEngine
 		Logger reflectionsLogger = Logger.getLogger( "org.reflections.Reflections" );
 		reflectionsLogger.setLevel( Level.OFF );
 		
-		FileHandler hibernateSqlHandler = __FileHandler.__new( KelvinConfig.getLogDir() + "/hibernate-sql.log" );
+		FileHandler hibernateSqlHandler = __FileHandler.__new( KelvinConfig.getConfig().getLogDir() + "/hibernate-sql.log" );
 		hibernateSqlHandler.setLevel( Level.ALL );
 		hibernateSqlHandler.setFormatter( formatter );
 		
@@ -162,7 +161,7 @@ public class KelvinEngine
 		ResourceHandler handler = new ResourceHandler();
 		handler.setDirectoriesListed( true );
 		handler.setWelcomeFiles( new String[] { "index.html" } );
-		handler.setResourceBase( KelvinConfig.getWebDir() );
+		handler.setResourceBase( KelvinConfig.getConfig().getWebDir() );
 		
 		return handler;
 	}
@@ -171,7 +170,7 @@ public class KelvinEngine
 	{
 		// Setup servlet context handler
 		ResourceConfig resourceConfig = new ResourceConfig();
-		resourceConfig.packages( "ch.zhaw.iwi.cis.cleantech.restservice" );
+		resourceConfig.packages( KelvinConfig.getConfig().getApplicationBasePackage() );
 		resourceConfig.register( CustomObjectMapperProviderServer.class );
 		ServletHolder holder = new ServletHolder( new ServletContainer( resourceConfig ) );
 		holder.setInitParameter( "jersey.config.server.provider.classnames", LoggingFilter.class.getName() );
@@ -191,7 +190,7 @@ public class KelvinEngine
 	
 	private static RequestLogHandler getRequestLogHandler()
 	{
-		NCSARequestLog requestLog = new NCSARequestLog( KelvinConfig.getLogDir() + "/jetty-yyyy_mm_dd.request.log" );
+		NCSARequestLog requestLog = new NCSARequestLog( KelvinConfig.getConfig().getLogDir() + "/jetty-yyyy_mm_dd.request.log" );
 		requestLog.setRetainDays( 90 );
 		requestLog.setAppend( true );
 		requestLog.setExtended( false );
@@ -205,7 +204,7 @@ public class KelvinEngine
 	
 	private static SecurityHandler getSecurityHandler( Handler delegateHandler )
 	{
-		URL url = __URI.toURL( new File( KelvinConfig.getConfDir() + "/realm.properties" ).toURI() );
+		URL url = __URI.toURL( new File( KelvinConfig.getConfig().getConfDir() + "/realm.properties" ).toURI() );
 		
 		HashLoginService loginService = new HashLoginService( "CleanTechRealm", url.toString() );
 		webServer.addBean( loginService );
