@@ -68,6 +68,8 @@ public abstract class KelvinConfig
 		return new InetSocketAddress( "0.0.0.0", 8080 );
 	}
 	
+	public abstract String getPersistenceUnitName();
+	
 	private static KelvinConfig config;
 
 	public static KelvinConfig getConfig()

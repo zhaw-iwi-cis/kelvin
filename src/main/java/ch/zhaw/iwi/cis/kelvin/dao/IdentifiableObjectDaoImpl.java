@@ -5,15 +5,14 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
+import ch.zhaw.iwi.cis.kelvin.framework.KelvinConfig;
 import ch.zhaw.iwi.cis.kelvin.framework.service.ServiceRegistry;
 import ch.zhaw.iwi.cis.kelvin.model.IdentifiableObject;
 
 @Transactional
 public abstract class IdentifiableObjectDaoImpl implements IdentifiableObjectDao
 {
-	public static final String CLEANTECH_PERSISTENCE_UNIT = "cleantech";
-	
-	private EntityManager entityManager = ServiceRegistry.getRegistry().getService( CLEANTECH_PERSISTENCE_UNIT );
+	private EntityManager entityManager = ServiceRegistry.getRegistry().getService( KelvinConfig.getConfig().getPersistenceUnitName() );
 
 	public < T extends IdentifiableObject > int persist( T object )
 	{

@@ -209,8 +209,8 @@
 		<exec executable="tar">
 			<arg line="xzf ${app-release.tar.gz} -C ${target}/installed-release"/>
 		</exec>
-		<mkdir dir="${target}/installed-release/cleantech/db"/>
-		<mkdir dir="${target}/installed-release/cleantech/log"/>
+		<mkdir dir="${target}/installed-release/${app.name}/db"/>
+		<mkdir dir="${target}/installed-release/${app.name}/log"/>
 	</target>
 	
 	<!-- TESTING -->

@@ -98,13 +98,13 @@ public class KelvinEngine
 	{
 		Formatter formatter = new XMLFormatter();
 		
-		FileHandler cleantechHandler = __FileHandler.__new( KelvinConfig.getConfig().getLogDir() + "/application.log" );
-		cleantechHandler.setLevel( Level.INFO );
-		cleantechHandler.setFormatter( formatter );
+		FileHandler applicationHandler = __FileHandler.__new( KelvinConfig.getConfig().getLogDir() + "/application.log" );
+		applicationHandler.setLevel( Level.INFO );
+		applicationHandler.setFormatter( formatter );
 		
 		Logger defaultLogger = Logger.getLogger( "" );
 		defaultLogger.setLevel( Level.INFO );
-		defaultLogger.addHandler( cleantechHandler );
+		defaultLogger.addHandler( applicationHandler );
 
 		// TODO Find out why this isn't working...
 		Logger reflectionsLogger = Logger.getLogger( "org.reflections.Reflections" );
@@ -121,7 +121,7 @@ public class KelvinEngine
 	
 	private static void startDatabase()
 	{
-		InetSocketAddress derbySocketAddress = new InetSocketAddress( "0.0.0.0", 1527 );
+		InetSocketAddress derbySocketAddress = KelvinConfig.getConfig().getDatabaseInetSocketAddress();
 		
 		derbyServer = __NetworkServerControl.__new( derbySocketAddress.getAddress(), derbySocketAddress.getPort() );
 		__NetworkServerControl.start( derbyServer, null );
@@ -131,7 +131,7 @@ public class KelvinEngine
 	
 	private static void startWebServer()
 	{
-		InetSocketAddress webSocketAddress = new InetSocketAddress( "0.0.0.0", 8080 );
+		InetSocketAddress webSocketAddress = KelvinConfig.getConfig().getWebServerInetSocketAddress();
 
 		webServer = new Server( webSocketAddress );
 
@@ -206,7 +206,7 @@ public class KelvinEngine
 	{
 		URL url = __URI.toURL( new File( KelvinConfig.getConfig().getConfDir() + "/realm.properties" ).toURI() );
 		
-		HashLoginService loginService = new HashLoginService( "CleanTechRealm", url.toString() );
+		HashLoginService loginService = new HashLoginService( "ApplicationRealm", url.toString() );
 		webServer.addBean( loginService );
 
 		Constraint constraint = new Constraint( Constraint.__BASIC_AUTH, "user" );
