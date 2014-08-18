@@ -1,0 +1,26 @@
+#!/bin/bash
+
+KELVIN_HOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/.. && pwd )"
+
+LIB=${KELVIN_HOME}/lib
+PLUGIN=${KELVIN_HOME}/plugin
+LOG=${KELVIN_HOME}/log
+KELVIN_HOME_PROP=-Dch.zhaw.iwi.cis.kelvin.kelvinHome=${KELVIN_HOME}
+LOGGING_PROP=-Djava.util.logging.config.file=${KELVIN_HOME}/conf/logging.properties
+ASPECTJ_AGENT=-javaagent:${LIB}/aspectjweaver.jar
+DERBY_LOG=-Dderby.stream.error.file=${LOG}/derby.log
+
+for arg in "$@" ; do
+  if [ "$arg" = "-debug" ] ; then
+    DEBUG="-agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=y"
+  fi
+done
+
+cd ${KELVIN_HOME}
+
+for jar in $LIB/* $PLUGIN/*
+do
+	CLASSPATH=${CLASSPATH}:$jar
+done
+
+java -classpath ${CLASSPATH} ${DEBUG} ${KELVIN_HOME_PROP} ${DERBY_LOG} ${LOGGING_PROP} ${ASPECTJ_AGENT} ch.zhaw.iwi.cis.kelvin.framework.KelvinEngine $*

@@ -1,0 +1,167 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Kelvin, Concept Document
+\end_layout
+
+\begin_layout Author
+John Brush
+\begin_inset Newline newline
+\end_inset
+
+Zurich University of Applied Sciences
+\end_layout
+
+\begin_layout Date
+12.
+ August 2014
+\end_layout
+
+\begin_layout Section
+Kelvin Jar Structure
+\end_layout
+
+\begin_layout Description
+Framwork
+\begin_inset space ~
+\end_inset
+
+Classes Includes the Kelvin engine, supporting classes and application base
+ classes.
+\end_layout
+
+\begin_layout Description
+kelvin.xml Base Ant build file for applications.
+\end_layout
+
+\begin_layout Description
+kelvin,
+\begin_inset space ~
+\end_inset
+
+kelvin.bat Script for starting Kelvin engine.
+\end_layout
+
+\begin_layout Description
+pom.xml Kelvin dependencies.
+\end_layout
+
+\begin_layout Section
+Application Structure
+\end_layout
+
+\begin_layout Description
+Application
+\begin_inset space ~
+\end_inset
+
+Classes
+\end_layout
+
+\begin_layout Description
+build.xml
+\end_layout
+
+\begin_layout Description
+ivy.xml
+\end_layout
+
+\begin_layout Description
+ivy-bootstrap.xml
+\end_layout
+
+\begin_layout Section
+Application Bootstrapping
+\end_layout
+
+\begin_layout Itemize
+Retrieve kelvin.jar via Ivy:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+resolve using ivy-bootstrap.xml
+\end_layout
+
+\begin_layout Itemize
+retrieve kelvin.jar to /lib --> includes dependencies of kelvin
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Import kelvin.xml from kelvin.jar
+\end_layout
+
+\begin_layout Itemize
+Resolve and retrieve all using ivy.xml
+\end_layout
+
+\begin_layout Itemize
+Execute further tasks
+\end_layout
+
+\begin_layout Section
+Application Release Packaging
+\end_layout
+
+\end_body
+\end_document

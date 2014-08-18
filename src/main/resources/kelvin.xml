@@ -9,8 +9,10 @@
 	<exec executable="svnversion" outputproperty="svnversion-temp" />
 	<propertyregex property="svnversion" input="${svnversion-temp}" regexp=":" replace="-"/>
 
+	<!-- PROPERTIES -->
 	<property name="ivy.cache" location="${user.home}/.ivy2"/>
 	<property name="lib" location="${basedir}/lib"/>
+	<property name="app.name" value="${ant.project.name}"/>
 
 	<property name="src" location="${basedir}/src"/>
 	<property name="src.main.java" location="${src}/main/java"/>
@@ -24,23 +26,34 @@
 	<property name="target.reports" location="${target}/reports"/>
 	<property name="target.javadoc" location="${target}/javadoc"/>
 
-	<property name="app.jar" location="${target}/${ant.project.name}-${svnversion}.jar"/>
-	<property name="app-test.jar" location="${target}/${ant.project.name}-test-${svnversion}.jar"/>
-	<property name="app-release.tar" location="${target}/${ant.project.name}-release-${svnversion}.tar"/>
-	<property name="app-release.tar.gz" location="${target}/${ant.project.name}-release-${svnversion}.tar.gz"/>
-	
-	<path id="kelvin.libs.main">
+	<property name="app.jar" location="${target}/${app.name}-${svnversion}.jar"/>
+	<property name="app-test.jar" location="${target}/${app.name}-test-${svnversion}.jar"/>
+	<property name="app-release.tar" location="${target}/${app.name}-release-${svnversion}.tar"/>
+	<property name="app-release.tar.gz" location="${target}/${app.name}-release-${svnversion}.tar.gz"/>
+
+	<!-- VARIABLE (OVERRIDABLE) PROPERTIES -->
+	<property name="test.scope" value="**/*Test.class"/>
+	<property name="debug" value="false"/>
+
+	<!-- PATHS -->
+	<path id="app.libs.main"/>
+	<path id="app.libs.test"/>
+		
+	<path id="libs.main">
+		<path refid="app.libs.main"/>
 		<fileset dir="${lib}">
 			<include name="**/*.jar"/>
 		</fileset>
 	</path>
 
-	<path id="kelvin.libs.test">
+	<path id="libs.test">
+		<path refid="app.libs.test"/>
 		<path refid="libs.main"/>
 		<pathelement location="${app.jar}"/>
 		<pathelement location="${app-test.jar}"/>
 	</path>
 	
+	<!-- INITIALIZATION -->
 	<target name="init-libs">
 		<if>
 			<available file="${lib}/INIT-LIBS-FLAG"/>
@@ -153,6 +166,84 @@
 				<property name="profile.arg" value=""/>
 			</else>
 		</if>
+	</target>
+
+	<!-- COMPILATION -->
+	<target name="compile.main" depends="init">
+		<javac
+			includeantruntime="false"
+			srcdir="${src.main.java}"
+			destdir="${target.main}"
+			classpathref="libs.main"
+			debug="on"
+			debuglevel="lines,vars,source"
+			encoding="UTF8"/>
+			</target>
+
+	<target name="compile.test" depends="init">
+		<javac
+			includeantruntime="false"
+			srcdir="${src.test.java}"
+			destdir="${target.test}"
+			classpathref="libs.test"
+			debug="on"
+			debuglevel="lines,vars,source"
+			encoding="UTF8"/>
+	</target>
+
+	<!-- RELEASE -->
+	<target name="build-release" depends="package">
+		<unzip src="${lib}/kelvin.jar" dest="${target}">
+		    <patternset>
+		        <include name="scripts/kelvin"/>
+		    </patternset>
+		</unzip>
+		<move file="${target}/scripts/kelvin" tofile="${target}/scripts/${app.name}"/>
+		<!-- Actual release artifact must be built overridding target
+		     in application script. -->
+	</target>
+	
+	<target name="install-release" depends="build-release">
+		<delete dir="${target}/installed-release"/>
+		<mkdir dir="${target}/installed-release"/>
+		<exec executable="tar">
+			<arg line="xzf ${app-release.tar.gz} -C ${target}/installed-release"/>
+		</exec>
+		<mkdir dir="${target}/installed-release/cleantech/db"/>
+		<mkdir dir="${target}/installed-release/cleantech/log"/>
+	</target>
+	
+	<!-- TESTING -->
+	<target name="test" depends="package">
+		<junit fork="true" forkmode="once" showoutput="true" printsummary="on">
+			<jvmarg line="${debug.arg}"/>
+			<jvmarg line="${profile.arg}"/>
+			<jvmarg value="-ea"/>
+			<classpath refid="libs.test"/>
+			<formatter type="xml"/>
+			<batchtest todir="${target.reports}">
+				<zipfileset src="${app-test.jar}">
+					<include name="${test.scope}"/>
+					<exclude name="**/Abstract*Test.class"/>
+				</zipfileset>
+			</batchtest>
+		</junit>
+		<junitreport todir="${target.reports}">
+			<fileset dir="${target.reports}">
+				<include name="TEST-*.xml"/>
+			</fileset>
+			<report format="frames" todir="${target.reports}/html"/>
+		</junitreport>
+	</target>
+
+	<!-- CLEANING -->
+	<target name="clean">
+		<delete dir="${target}"/>
+		<delete dir="${lib}"/>
+	</target>
+
+	<target name="clean-ivy">
+		<delete dir="${ivy.cache}"/>
 	</target>
 
 </project>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<aspectj>
+    <aspects>
+        <aspect name="ch.zhaw.iwi.cis.kelvin.framework.service.TransactionalAspect"/>
+    </aspects>
+   <weaver options="-nowarn">
+   </weaver>
+</aspectj>
