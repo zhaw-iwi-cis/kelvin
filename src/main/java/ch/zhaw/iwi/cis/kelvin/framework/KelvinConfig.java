@@ -1,7 +1,11 @@
 package ch.zhaw.iwi.cis.kelvin.framework;
 
 import java.net.InetSocketAddress;
+import java.security.Principal;
+import java.util.HashSet;
 import java.util.Set;
+
+import javax.security.auth.Subject;
 
 import org.apache.commons.lang.StringUtils;
 import org.reflections.Reflections;
@@ -10,6 +14,16 @@ import __java.lang.__Class;
 
 public abstract class KelvinConfig
 {
+	public static final String DEFAULT_DATABASE_HOSTNAME = "0.0.0.0";
+	public static final int DEFAULT_DATABASE_PORT = 1527;
+	public static final String DEFAULT_WEB_SERVER_HOSTNAME = "0.0.0.0";
+	public static final int DEFAULT_WEB_SERVER_PORT = 8080;
+	public static final String DEFAULT_TEST_CLIENT_HOSTNAME = "localhost";
+	public static final int DEFAULT_TEST_CLIENT_PORT = 8080;
+	public static final int DEFAULT_TEST_CLIENT_PORT_WITH_PROXY = 8888;
+	public static final String DEFAULT_TEST_CLIENT_USER_NAME = "testuser";
+	public static final String DEFAULT_TEST_CLIENT_USER_PASSWORD = "testpassword";
+	
 	public static final String APPLICATION_HOME = KelvinConfig.class.getPackage().getName() + ".applicationHome";
 	public static final String BIN = "/bin";
 	public static final String CONF = "/conf";
@@ -58,14 +72,33 @@ public abstract class KelvinConfig
 	
 	public abstract String getApplicationBasePackage();
 	
-	public InetSocketAddress getDatabaseInetSocketAddress()
+	public InetSocketAddress getDatabaseAddress()
 	{
-		return new InetSocketAddress( "0.0.0.0", 1527 );
+		return new InetSocketAddress( DEFAULT_DATABASE_HOSTNAME, DEFAULT_DATABASE_PORT );
 	}
 	
-	public InetSocketAddress getWebServerInetSocketAddress()
+	public InetSocketAddress getWebServerAddress()
 	{
-		return new InetSocketAddress( "0.0.0.0", 8080 );
+		return new InetSocketAddress( DEFAULT_WEB_SERVER_HOSTNAME, DEFAULT_WEB_SERVER_PORT );
+	}
+	
+	public InetSocketAddress getTestClientAddress()
+	{
+		return new InetSocketAddress( DEFAULT_TEST_CLIENT_HOSTNAME, DEFAULT_TEST_CLIENT_PORT );
+	}
+	
+	public Subject getTestClientSubject()
+	{
+		Set< Principal > principals = new HashSet< Principal >();
+		principals.add( new BasicAuthPrincipal( DEFAULT_TEST_CLIENT_USER_NAME ) );
+		
+		Set< Object > pubCredentials = new HashSet< Object >();
+		Set< Object > privCredentials = new HashSet< Object >();
+		privCredentials.add( new BasicAuthCredential( DEFAULT_TEST_CLIENT_USER_PASSWORD ) );
+		
+		Subject subject = new Subject( true, principals, pubCredentials, privCredentials );
+		
+		return subject;
 	}
 	
 	public abstract String getPersistenceUnitName();
@@ -83,7 +116,7 @@ public abstract class KelvinConfig
 	@SuppressWarnings( "unchecked" )
 	private static KelvinConfig createConfig()
 	{
-		Reflections reflections = new Reflections( ".*" );
+		Reflections reflections = ReflectionsUtil.getReflections( ".*" );
 		Set< Class< KelvinConfig > > configClasses = (Set< Class< KelvinConfig > >)(Object)reflections.getTypesAnnotatedWith( ApplicationConfig.class );
 		
 		if ( configClasses.size() < 1 )

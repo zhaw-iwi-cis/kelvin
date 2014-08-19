@@ -72,7 +72,7 @@
 	<classpathentry kind="lib" path="lib/jstl.jar"/>
 	<classpathentry kind="lib" path="lib/junit.jar"/>
 	<classpathentry kind="lib" path="lib/osgi-resource-locator.jar"/>
-	<classpathentry kind="lib" path="lib/reflections.jar"/>
+	<classpathentry kind="lib" path="lib/reflections.jar" sourcepath="/Users/john/.m2/repository/org/reflections/reflections/0.9.9-RC1/reflections-0.9.9-RC1-sources.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-api.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-jdk14.jar"/>
 	<classpathentry kind="lib" path="lib/validation-api.jar"/>

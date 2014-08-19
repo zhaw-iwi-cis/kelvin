@@ -4,13 +4,15 @@ import java.util.Set;
 
 import org.reflections.Reflections;
 
+import ch.zhaw.iwi.cis.kelvin.framework.ReflectionsUtil;
+
 @ServiceRegistryAgent
 public class BasicServiceRegistryAgent implements ServiceRegistryAgentInterface
 {
 	@Override
 	public void registerServiceFactories( ServiceRegistry registry )
 	{
-		Reflections reflections = new Reflections( ".*" );
+		Reflections reflections = ReflectionsUtil.getReflections( ".*" );
 		Set< Class< ? > > serviceClasses = reflections.getTypesAnnotatedWith( Service.class );
 		
 		for ( Class< ? > serviceClass : serviceClasses )

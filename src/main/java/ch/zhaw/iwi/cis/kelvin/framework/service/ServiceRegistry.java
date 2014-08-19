@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.reflections.Reflections;
 
+import ch.zhaw.iwi.cis.kelvin.framework.ReflectionsUtil;
 import __java.lang.__Class;
 
 public class ServiceRegistry
@@ -24,7 +25,7 @@ public class ServiceRegistry
 	
 	public synchronized void start()
 	{
-		Reflections reflections = new Reflections( ".*" );
+		Reflections reflections = ReflectionsUtil.getReflections( ".*" );
 		Set< Class< ? > > serviceRegistryAgentClasses = reflections.getTypesAnnotatedWith( ServiceRegistryAgent.class );
 		
 		for ( Class< ? > serviceRegistryAgentClass : serviceRegistryAgentClasses )

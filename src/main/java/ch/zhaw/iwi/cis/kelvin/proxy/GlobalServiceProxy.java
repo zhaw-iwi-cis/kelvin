@@ -1,5 +1,8 @@
 package ch.zhaw.iwi.cis.kelvin.proxy;
 
+import java.net.InetSocketAddress;
+
+import javax.security.auth.Subject;
 import javax.ws.rs.core.MediaType;
 
 import ch.zhaw.iwi.cis.kelvin.restservice.GlobalRestService;
@@ -7,9 +10,9 @@ import ch.zhaw.iwi.cis.kelvin.service.GlobalService;
 
 public class GlobalServiceProxy extends ServiceProxy implements GlobalService
 {
-	protected GlobalServiceProxy( String hostName, int port, String userName, String password )
+	protected GlobalServiceProxy( InetSocketAddress serviceAddress, Subject subject )
 	{
-		super( hostName, port, userName, password, GlobalRestService.GLOBAL_BASE );
+		super( serviceAddress, subject, GlobalRestService.GLOBAL_BASE );
 	}
 
 	@Override

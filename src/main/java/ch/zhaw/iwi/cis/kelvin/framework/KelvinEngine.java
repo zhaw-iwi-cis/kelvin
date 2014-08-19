@@ -106,10 +106,6 @@ public class KelvinEngine
 		defaultLogger.setLevel( Level.INFO );
 		defaultLogger.addHandler( applicationHandler );
 
-		// TODO Find out why this isn't working...
-		Logger reflectionsLogger = Logger.getLogger( "org.reflections.Reflections" );
-		reflectionsLogger.setLevel( Level.OFF );
-		
 		FileHandler hibernateSqlHandler = __FileHandler.__new( KelvinConfig.getConfig().getLogDir() + "/hibernate-sql.log" );
 		hibernateSqlHandler.setLevel( Level.ALL );
 		hibernateSqlHandler.setFormatter( formatter );
@@ -121,7 +117,7 @@ public class KelvinEngine
 	
 	private static void startDatabase()
 	{
-		InetSocketAddress derbySocketAddress = KelvinConfig.getConfig().getDatabaseInetSocketAddress();
+		InetSocketAddress derbySocketAddress = KelvinConfig.getConfig().getDatabaseAddress();
 		
 		derbyServer = __NetworkServerControl.__new( derbySocketAddress.getAddress(), derbySocketAddress.getPort() );
 		__NetworkServerControl.start( derbyServer, null );
@@ -131,7 +127,7 @@ public class KelvinEngine
 	
 	private static void startWebServer()
 	{
-		InetSocketAddress webSocketAddress = KelvinConfig.getConfig().getWebServerInetSocketAddress();
+		InetSocketAddress webSocketAddress = KelvinConfig.getConfig().getWebServerAddress();
 
 		webServer = new Server( webSocketAddress );
 

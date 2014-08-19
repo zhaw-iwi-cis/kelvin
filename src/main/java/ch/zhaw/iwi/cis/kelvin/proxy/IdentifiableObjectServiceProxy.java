@@ -1,8 +1,10 @@
 package ch.zhaw.iwi.cis.kelvin.proxy;
 
+import java.net.InetSocketAddress;
+
+import javax.security.auth.Subject;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import ch.zhaw.iwi.cis.kelvin.model.IdentifiableObject;
 import ch.zhaw.iwi.cis.kelvin.restservice.IdentifiableObjectRestService;
@@ -10,17 +12,14 @@ import ch.zhaw.iwi.cis.kelvin.service.IdentifiableObjectService;
 
 public abstract class IdentifiableObjectServiceProxy extends ServiceProxy implements IdentifiableObjectService
 {
-	protected IdentifiableObjectServiceProxy( String hostName, int port, String userName, String password, String servicePath )
+	protected IdentifiableObjectServiceProxy( InetSocketAddress serviceAddress, Subject subject, String servicePath )
 	{
-		super( hostName, port, userName, password, servicePath );
+		super( serviceAddress, subject, servicePath );
 	}
 
 	public < T extends IdentifiableObject > int persist( T persistentObject )
 	{
-//		return getServiceTarget().path( IdentifiableObjectRestService.PERSIST ).request( MediaType.APPLICATION_JSON ).post( Entity.json( persistentObject ) ).readEntity( int.class );
-
-		Response response = getServiceTarget().path( IdentifiableObjectRestService.PERSIST ).request( MediaType.APPLICATION_JSON ).post( Entity.json( persistentObject ) );
-		return response.readEntity( int.class );
+		return getServiceTarget().path( IdentifiableObjectRestService.PERSIST ).request( MediaType.APPLICATION_JSON ).post( Entity.json( persistentObject ) ).readEntity( int.class );
 	}
 
 	public < T extends IdentifiableObject > void remove( T persistentObject )
