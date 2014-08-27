@@ -10,20 +10,50 @@
 	
 	<property name="ivy.cache" location="${user.home}/.ivy2"/>
 	<property name="lib" location="${basedir}/lib"/>
+	<property name="kelvin.name" value="${ant.project.name}"/>
 
 	<property name="src" location="${basedir}/src"/>
 	<property name="src.main.java" location="${src}/main/java"/>
 	<property name="src.main.resources" location="${src}/main/resources"/>
+	<property name="src.test" location="${src}/test"/>
+	<property name="src.test.server.java" location="${src.test}/server/java"/>
+	<property name="src.test.server.resources" location="${src.test}/server/resources"/>
+	<property name="src.test.client.java" location="${src.test}/client/java"/>
+	<property name="src.test.client.resources" location="${src.test}/client/resources"/>
 
 	<property name="target" location="${basedir}/target"/>
 	<property name="target.main" location="${target}/main/classes"/>
+	<property name="target.test" location="${target}/test"/>
+	<property name="target.test.server" location="${target.test}/server/classes"/>
+	<property name="target.test.client" location="${target.test}/client/classes"/>
+	<property name="target.reports" location="${target}/reports"/>
 
-	<property name="kelvin.jar" location="${target}/kelvin-${svnversion}.jar"/>
+	<property name="kelvin.jar" location="${target}/${kelvin.name}-${svnversion}.jar"/>
+	<property name="kelvin-test-server.jar" location="${target}/${kelvin.name}-test-server-${svnversion}.jar"/>
+	<property name="kelvin-test-client.jar" location="${target}/${kelvin.name}-test-client-${svnversion}.jar"/>
+	<property name="kelvin-test.tar" location="${target}/${kelvin.name}-test-${svnversion}.tar"/>
+	<property name="kelvin-test.tar.gz" location="${target}/${kelvin.name}-test-${svnversion}.tar.gz"/>
+	<property name="installed-test" location="${target}/installed-test"/>
 
+	<!-- VARIABLE (OVERRIDABLE) PROPERTIES -->
+	<property name="test.scope" value="**/*Test.class"/>
+	<property name="debug" value="false"/>
+	
 	<path id="libs.main">
 		<fileset dir="${lib}">
 			<include name="**/*.jar"/>
 		</fileset>
+	</path>
+
+	<path id="libs.test.server">
+		<path refid="libs.main"/>
+		<pathelement location="${kelvin.jar}"/>
+		<pathelement location="${kelvin-test-server.jar}"/>
+	</path>
+
+	<path id="libs.test.client">
+		<path refid="libs.test.server"/>
+		<pathelement location="${kelvin-test-client.jar}"/>
 	</path>
 
 	<target name="init-libs">
@@ -75,7 +105,6 @@
 					<arg line="-jar ${lib}/commons-lang.jar"/>
 					<arg line="-classpath ${lib}/__rt.jar"/>
 					<arg line="-includes org\.apache\.commons\.lang\..*"/>
-					<arg line="-keepIntermediate true"/>
 					<arg line="-output ${lib}"/>
 				</exec>
 				<exec executable="deflector">
@@ -84,6 +113,32 @@
 					<arg line="-includes org\.apache\.commons\.configuration\..*"/>
 					<arg line="-output ${lib}"/>
 				</exec>
+				<exec executable="deflector">
+					<arg line="-jar ${lib}/commons-io.jar"/>
+					<arg line="-classpath ${lib}/__rt.jar"/>
+					<arg line="-includes org\.apache\.commons\.io\..*"/>
+					<arg line="-output ${lib}"/>
+				</exec>
+				<exec executable="deflector">
+					<arg line="-jar ${lib}/jackson-core.jar"/>
+					<arg line="-classpath ${lib}/__rt.jar"/>
+					<arg line="-includes com\.fasterxml\.jackson\.core\..*"/>
+					<arg line="-output ${lib}"/>
+				</exec>
+				<exec executable="deflector">
+					<arg line="-jar ${lib}/jackson-annotations.jar"/>
+					<arg line="-classpath ${lib}/__rt.jar"/>
+					<arg line="-includes com\.fasterxml\.jackson\.annotation\..*"/>
+					<arg line="-output ${lib}"/>
+				</exec>
+				<!-- TODO Deflector is running into problems compiling this; see if this is a bug 
+				<exec executable="deflector">
+					<arg line="-jar ${lib}/jackson-databind.jar"/>
+					<arg line="-classpath ${lib}/__rt.jar:${lib}/jackson-core.jar:${lib}/__jackson-core.jar:${lib}/jackson-annotations.jar"/>
+					<arg line="-includes com\.fasterxml\.jackson\.databind\..*"/>
+					<arg line="-output ${lib}"/>
+				</exec>
+				-->
 				<!-- We are deleting these libs here because they are not actually needed to
 				     execute the application; their purpose is mostly to satisfy deflector
 				     dependencies. -->
@@ -108,6 +163,9 @@
 	
 	<target name="init" depends="init-libs">
 		<mkdir dir="${target.main}"/>
+		<mkdir dir="${target.test.server}"/>
+		<mkdir dir="${target.test.client}"/>
+		<mkdir dir="${target.reports}"/>
 		<tstamp>
 			<format property="DSTAMP" pattern="yyyyMMdd"/>
 			<format property="TSTAMP" pattern="HHmmss"/>
@@ -115,6 +173,16 @@
 		<tstamp>
 			<format property="tstamp.build" pattern="dd.MM.yyyy HH:mm"/>
 		</tstamp>
+		<if>
+			<equals arg1="${debug}" arg2="true"/>
+			<then>
+				<property name="debug.arg"
+			value="-agentlib:jdwp=transport=dt_socket,address=8001,server=y,suspend=y"/>
+			</then>
+			<else>
+				<property name="debug.arg" value=""/>
+			</else>
+		</if>
 	</target>
 
 	<target name="compile.main" depends="init">
@@ -143,8 +211,88 @@
 		</jar>
 	</target>
 
-	<target name="package" depends="package.main"/>
+	<target name="compile.test.server" depends="package.main">
+		<javac
+			includeantruntime="false"
+			srcdir="${src.test.server.java}"
+			destdir="${target.test.server}"
+			classpathref="libs.test.server"
+			debug="on"
+			debuglevel="lines,vars,source"
+			encoding="UTF8"/>
+	</target>
 
+	<target name="package.test.server" depends="compile.test.server">
+		<jar destfile="${kelvin-test-server.jar}">
+			<zipfileset dir="${target.test.server}">
+				<include name="**"/>
+			</zipfileset>
+		</jar>
+	</target>
+
+	<target name="compile.test.client" depends="package.main">
+		<javac
+			includeantruntime="false"
+			srcdir="${src.test.client.java}"
+			destdir="${target.test.client}"
+			classpathref="libs.test.client"
+			debug="on"
+			debuglevel="lines,vars,source"
+			encoding="UTF8"/>
+	</target>
+
+	<target name="package.test.client" depends="compile.test.client">
+		<jar destfile="${kelvin-test-client.jar}">
+			<zipfileset dir="${target.test.client}">
+				<include name="**"/>
+			</zipfileset>
+		</jar>
+	</target>
+
+	<target name="package" depends="package.main, package.test.server, package.test.client"/>
+	
+	<target name="build-test" depends="package">
+		<tar destfile="${kelvin-test.tar}" longfile="gnu">
+			<tarfileset file="${kelvin.jar}" prefix="${kelvin.name}/lib"/>
+			<tarfileset file="${kelvin-test-server.jar}" prefix="${kelvin.name}/lib"/>
+			<tarfileset file="${src.test.server.resources}/realm.properties" prefix="${kelvin.name}/conf"/>
+			<tarfileset dir="${lib}" prefix="${kelvin.name}/lib">
+				<include name="*.jar"/>
+			</tarfileset>
+			<tarfileset file="${src.main.resources}/scripts/kelvin" filemode="755" username="*" group="*" prefix="${kelvin.name}/bin"/>
+		</tar>
+		<gzip destfile="${kelvin-test.tar.gz}" src="${kelvin-test.tar}"/>
+	</target>
+
+	<target name="install-test" depends="build-test">
+		<delete dir="${installed-test}"/>
+		<mkdir dir="${installed-test}"/>
+		<exec executable="tar">
+			<arg line="xzf ${kelvin-test.tar.gz} -C ${target}/installed-test"/>
+		</exec>
+	</target>
+
+	<target name="test" depends="package">
+		<junit fork="true" forkmode="once" showoutput="true" printsummary="on">
+			<jvmarg line="${debug.arg}"/>
+			<jvmarg value="-ea"/>
+			<classpath refid="libs.test.client"/>
+			<formatter type="xml"/>
+			<batchtest todir="${target.reports}">
+				<zipfileset src="${kelvin-test-client.jar}">
+					<include name="${test.scope}"/>
+					<exclude name="**/Abstract*Test.class"/>
+				</zipfileset>
+			</batchtest>
+		</junit>
+		<junitreport todir="${target.reports}">
+			<fileset dir="${target.reports}">
+				<include name="TEST-*.xml"/>
+			</fileset>
+			<report format="frames" todir="${target.reports}/html"/>
+		</junitreport>
+	</target>
+	
 	<target name="clean">
 		<delete dir="${target}"/>
 		<delete dir="${lib}"/>

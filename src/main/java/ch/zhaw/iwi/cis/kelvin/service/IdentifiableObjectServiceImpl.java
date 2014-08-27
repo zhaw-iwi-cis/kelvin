@@ -4,14 +4,15 @@ import javax.transaction.Transactional;
 
 import ch.zhaw.iwi.cis.kelvin.dao.IdentifiableObjectDao;
 import ch.zhaw.iwi.cis.kelvin.model.IdentifiableObject;
+import ch.zhaw.iwi.cis.kelvin.model.ObjectID;
 
 @Transactional
 public abstract class IdentifiableObjectServiceImpl implements IdentifiableObjectService
 {
 	@Override
-	public < T extends IdentifiableObject > int persist( T object )
+	public < T extends IdentifiableObject > void persist( T object )
 	{
-		return getIdentifiableObjectDao().persist( object );
+		getIdentifiableObjectDao().persist( object );
 	}
 
 	@Override
@@ -21,13 +22,9 @@ public abstract class IdentifiableObjectServiceImpl implements IdentifiableObjec
 	}
 
 	@Override
-	public < T extends IdentifiableObject > T findByID( int id )
+	public < T extends IdentifiableObject > T findByID( ObjectID id )
 	{
 		return getIdentifiableObjectDao().findById( id );
-	}
-	
-	public < T extends IdentifiableObject > T findByIDDelegate( Integer id ) {
-		return findByID( id );
 	}
 	
 	protected abstract IdentifiableObjectDao getIdentifiableObjectDao();

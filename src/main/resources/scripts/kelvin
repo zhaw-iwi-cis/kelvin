@@ -23,4 +23,7 @@ do
 	CLASSPATH=${CLASSPATH}:$jar
 done
 
+mkdir -p db
+mkdir -p log
+
 java -classpath ${CLASSPATH} ${DEBUG} ${APPLICATION_HOME_PROP} ${DERBY_LOG} ${LOGGING_PROP} ${ASPECTJ_AGENT} ch.zhaw.iwi.cis.kelvin.framework.KelvinEngine $*

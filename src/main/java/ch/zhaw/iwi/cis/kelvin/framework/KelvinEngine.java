@@ -4,14 +4,11 @@ import java.io.File;
 import java.net.InetSocketAddress;
 import java.net.URL;
 import java.util.Collections;
-import java.util.EnumSet;
 import java.util.logging.FileHandler;
 import java.util.logging.Formatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.XMLFormatter;
-
-import javax.servlet.DispatcherType;
 
 import org.apache.derby.drda.NetworkServerControl;
 import org.eclipse.jetty.security.ConstraintMapping;
@@ -31,16 +28,12 @@ import org.eclipse.jetty.server.session.SessionHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.security.Constraint;
-import org.glassfish.jersey.filter.LoggingFilter;
-import org.glassfish.jersey.server.ResourceConfig;
-import org.glassfish.jersey.servlet.ServletContainer;
 
 import __java.net.__URI;
 import __java.util.logging.__FileHandler;
 import __org.apache.derby.drda.__NetworkServerControl;
 import __org.eclipse.jetty.util.component.__AbstractLifeCycle;
 import ch.zhaw.iwi.cis.kelvin.framework.service.ServiceRegistry;
-import ch.zhaw.iwi.cis.kelvin.restservice.RestService;
 
 public class KelvinEngine
 {
@@ -135,10 +128,9 @@ public class KelvinEngine
 		webServer.setSessionIdManager( new HashSessionIdManager() );
         
         HandlerCollection handlers = new HandlerCollection();
-        handlers.addHandler( getSecurityHandler( getServletContextHandler() ) );
-        
+        handlers.addHandler( getServicesHandler() );
         handlers.addHandler( getRequestLogHandler() );
-        handlers.addHandler( getResourceHandler() );
+        handlers.addHandler( getWebResourceHandler() );
 		webServer.setHandler( handlers );
         
         // Start the server.
@@ -152,7 +144,7 @@ public class KelvinEngine
 		ServiceRegistry.getRegistry().start();
 	}
 	
-	private static ResourceHandler getResourceHandler()
+	private static ResourceHandler getWebResourceHandler()
 	{
 		ResourceHandler handler = new ResourceHandler();
 		handler.setDirectoriesListed( true );
@@ -162,27 +154,32 @@ public class KelvinEngine
 		return handler;
 	}
 
-	private static ServletContextHandler getServletContextHandler()
+	private static Handler getServicesHandler()
 	{
-		// Setup servlet context handler
-		ResourceConfig resourceConfig = new ResourceConfig();
-		resourceConfig.packages( KelvinConfig.getConfig().getApplicationBasePackage() );
-		resourceConfig.register( CustomObjectMapperProviderServer.class );
-		ServletHolder holder = new ServletHolder( new ServletContainer( resourceConfig ) );
-		holder.setInitParameter( "jersey.config.server.provider.classnames", LoggingFilter.class.getName() );
-		holder.setInitOrder( 1 );
-		ServletContextHandler handler = new ServletContextHandler();
-		handler.setContextPath( RestService.SERVICES_BASE );
-		handler.addServlet( holder, "/*" );
-		handler.addFilter( ThreadLocalFilter.class, "/*", EnumSet.of( DispatcherType.INCLUDE, DispatcherType.REQUEST ) );
-
-		// Setup session handler.
-        HashSessionManager manager = new HashSessionManager();
-        SessionHandler sessionHandler = new SessionHandler(manager);
-        handler.setHandler(sessionHandler);
-        
+		Handler handler = getKelvinServletContextHandler();
+		
+		if ( KelvinConfig.getConfig().isSecurityEnabled() )
+			handler = getSecurityHandler( handler );
+		
 		return handler;
 	}
+	
+	private static ServletContextHandler getKelvinServletContextHandler()
+	{
+		// Setup servlet context handler
+		ServletHolder holder = new ServletHolder( new KelvinServlet() );
+		ServletContextHandler handler = new ServletContextHandler();
+		handler.setContextPath( KelvinServlet.SERVICES_BASE );
+		handler.addServlet( holder, "/*" );
+
+		// Setup session handler.
+		HashSessionManager manager = new HashSessionManager();
+		SessionHandler sessionHandler = new SessionHandler( manager );
+		handler.setHandler( sessionHandler );
+     
+		return handler;
+	}	
+
 	
 	private static RequestLogHandler getRequestLogHandler()
 	{

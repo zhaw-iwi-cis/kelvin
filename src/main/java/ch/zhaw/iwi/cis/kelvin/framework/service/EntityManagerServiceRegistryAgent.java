@@ -17,6 +17,10 @@ public class EntityManagerServiceRegistryAgent implements ServiceRegistryAgentIn
 	public void registerServiceFactories( ServiceRegistry registry )
 	{
 		InputStream configStream = ClassLoader.getSystemResourceAsStream( "META-INF/persistence.xml" );
+		
+		if ( configStream == null )
+			return;
+
 		XMLConfiguration xmlConfig = new XMLConfiguration();
 		xmlConfig.setDelimiterParsingDisabled( true );
 		__XMLConfiguration.load( xmlConfig, configStream );

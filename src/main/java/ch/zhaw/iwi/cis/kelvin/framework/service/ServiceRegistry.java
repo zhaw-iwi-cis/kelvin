@@ -57,8 +57,12 @@ public class ServiceRegistry
 		if ( service == null )
 		{
 			ServiceFactory factory = serviceFactoryMap.get( name );
-			service = factory.create();
-			serviceMap.put( name, service );
+			
+			if ( factory != null )
+			{
+				service = factory.create();
+				serviceMap.put( name, service );
+			}	
 		}
 		
 		return service;

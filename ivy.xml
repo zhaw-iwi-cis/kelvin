@@ -5,7 +5,6 @@
 	<!ENTITY flexjson.revision "2.0">
 	<!ENTITY jackson.revision "1.9.13">
 	<!ENTITY jackson.jaxrs.revision "2.3.3">
-	<!ENTITY jackson.datatype.guava.revision "2.4.0">
 	<!ENTITY jee.web.revision "7.0">
 	<!ENTITY derby.revision "10.10.1.1">
 	<!ENTITY jstl.revision "1.2">
@@ -38,8 +37,7 @@
 		<dependency org="net.sf.flexjson" name="flexjson" rev="&flexjson.revision;" conf="default"/>
 		<dependency org="org.codehaus.jackson" name="jackson-core-asl" rev="&jackson.revision;" conf="default"/>
 		<dependency org="org.codehaus.jackson" name="jackson-mapper-asl" rev="&jackson.revision;" conf="default"/>
-		<dependency org="com.fasterxml.jackson.jaxrs" name="jackson-jaxrs-json-provider" rev="&jackson.jaxrs.revision;" conf="default"/>
-		<dependency org="com.fasterxml.jackson.datatype" name="jackson-datatype-guava" rev="&jackson.datatype.guava.revision;" conf="default"/>
+		<dependency org="com.fasterxml.jackson.jaxrs" name="jackson-jaxrs-json-provider" rev="2.4.2" conf="default"/>
 		<dependency org="javax" name="javaee-web-api" rev="&jee.web.revision;" conf="default"/>
 		<dependency org="jstl" name="jstl" rev="&jstl.revision;" conf="default"/>
 		<dependency org="org.apache.derby" name="derby" rev="&derby.revision;" conf="default"/>

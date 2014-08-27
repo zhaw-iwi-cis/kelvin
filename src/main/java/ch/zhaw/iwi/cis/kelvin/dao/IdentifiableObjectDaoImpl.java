@@ -8,18 +8,17 @@ import javax.transaction.Transactional;
 import ch.zhaw.iwi.cis.kelvin.framework.KelvinConfig;
 import ch.zhaw.iwi.cis.kelvin.framework.service.ServiceRegistry;
 import ch.zhaw.iwi.cis.kelvin.model.IdentifiableObject;
+import ch.zhaw.iwi.cis.kelvin.model.ObjectID;
 
 @Transactional
 public abstract class IdentifiableObjectDaoImpl implements IdentifiableObjectDao
 {
 	private EntityManager entityManager = ServiceRegistry.getRegistry().getService( KelvinConfig.getConfig().getPersistenceUnitName() );
 
-	public < T extends IdentifiableObject > int persist( T object )
+	public < T extends IdentifiableObject > void persist( T object )
 	{
 		IdentifiableObject objectMerged = merge( object );
 		entityManager.persist( objectMerged );
-
-		return objectMerged.getID();
 	}
 
 	public < T extends IdentifiableObject > void remove( T object )
@@ -34,13 +33,13 @@ public abstract class IdentifiableObjectDaoImpl implements IdentifiableObjectDao
 	}
 
 	@SuppressWarnings( "unchecked" )
-	public < T extends IdentifiableObject > T findById( Integer id )
+	public < T extends IdentifiableObject > T findById( ObjectID id )
 	{
 		return (T)entityManager.find( getPersistentObjectClass(), id );
 	}
 
 	@SuppressWarnings( "unchecked" )
-	public < T extends IdentifiableObject > List< T > findByAll(Class< T > clazz)
+	public < T extends IdentifiableObject > List< T > findByAll( Class< T > clazz )
 	{
 		return entityManager.createQuery( "from " + clazz.getName() ).getResultList();
 	}

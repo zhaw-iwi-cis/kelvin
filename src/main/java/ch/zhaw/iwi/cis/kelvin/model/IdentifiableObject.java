@@ -2,45 +2,44 @@ package ch.zhaw.iwi.cis.kelvin.model;
 
 import java.io.Serializable;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.EmbeddedId;
 import javax.persistence.MappedSuperclass;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
+import ch.zhaw.iwi.cis.kelvin.framework.KelvinObjectIDResolver;
 
-@JsonTypeInfo( use = com.fasterxml.jackson.annotation.JsonTypeInfo.Id.CLASS, include = As.PROPERTY, property = "class" )
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+@JsonIdentityInfo( generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", resolver = KelvinObjectIDResolver.class )
 @MappedSuperclass
 public abstract class IdentifiableObject implements Serializable
 {
 	// TODO replace 1L with singleton constant.
 	private static final long serialVersionUID = 1L;
 
-	// TODO replace int with special UID class.
-	@Id
-	@GeneratedValue
-	private int id;
+	@EmbeddedId
+	private ObjectID id = new ObjectID();
 
 	public IdentifiableObject()
 	{
 	}
 
-	public int getID()
+	public ObjectID getId()
 	{
 		return id;
 	}
 
 	@Override
-	public final int hashCode()
+	public int hashCode()
 	{
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + id;
+		result = prime * result + ( ( id == null ) ? 0 : id.hashCode() );
 		return result;
 	}
 
 	@Override
-	public final boolean equals( Object obj )
+	public boolean equals( Object obj )
 	{
 		if ( this == obj )
 			return true;
@@ -49,7 +48,12 @@ public abstract class IdentifiableObject implements Serializable
 		if ( getClass() != obj.getClass() )
 			return false;
 		IdentifiableObject other = (IdentifiableObject)obj;
-		if ( id != other.id )
+		if ( id == null )
+		{
+			if ( other.id != null )
+				return false;
+		}
+		else if ( !id.equals( other.id ) )
 			return false;
 		return true;
 	}

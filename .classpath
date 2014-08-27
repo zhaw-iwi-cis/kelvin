@@ -2,11 +2,17 @@
 <classpath>
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="src" path="src/main/resources"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
+	<classpathentry kind="src" path="src/test/server/java"/>
+	<classpathentry kind="src" path="src/test/server/resources"/>
+	<classpathentry kind="src" path="src/test/client/java"/>
+	<classpathentry kind="src" path="src/test/client/resources"/>
 	<classpathentry kind="lib" path="lib/__commons-configuration.jar"/>
+	<classpathentry kind="lib" path="lib/__commons-io.jar"/>
 	<classpathentry kind="lib" path="lib/__commons-lang.jar"/>
 	<classpathentry kind="lib" path="lib/__derby.jar"/>
 	<classpathentry kind="lib" path="lib/__derbynet.jar"/>
+	<classpathentry kind="lib" path="lib/__jackson-annotations.jar"/>
+	<classpathentry kind="lib" path="lib/__jackson-core.jar"/>
 	<classpathentry kind="lib" path="lib/__javax.servlet-api.jar"/>
 	<classpathentry kind="lib" path="lib/__jetty-server.jar"/>
 	<classpathentry kind="lib" path="lib/__jetty-util.jar"/>
@@ -40,7 +46,6 @@
 	<classpathentry kind="lib" path="lib/jackson-core-asl.jar"/>
 	<classpathentry kind="lib" path="lib/jackson-core.jar"/>
 	<classpathentry kind="lib" path="lib/jackson-databind.jar"/>
-	<classpathentry kind="lib" path="lib/jackson-datatype-guava.jar"/>
 	<classpathentry kind="lib" path="lib/jackson-jaxrs-base.jar"/>
 	<classpathentry kind="lib" path="lib/jackson-jaxrs-json-provider.jar"/>
 	<classpathentry kind="lib" path="lib/jackson-mapper-asl.jar"/>
@@ -69,13 +74,15 @@
 	<classpathentry kind="lib" path="lib/jetty-util.jar"/>
 	<classpathentry kind="lib" path="lib/jetty-webapp.jar"/>
 	<classpathentry kind="lib" path="lib/jetty-xml.jar"/>
+	<classpathentry kind="lib" path="lib/jsr305.jar"/>
 	<classpathentry kind="lib" path="lib/jstl.jar"/>
 	<classpathentry kind="lib" path="lib/junit.jar"/>
 	<classpathentry kind="lib" path="lib/osgi-resource-locator.jar"/>
-	<classpathentry kind="lib" path="lib/reflections.jar" sourcepath="/Users/john/.m2/repository/org/reflections/reflections/0.9.9-RC1/reflections-0.9.9-RC1-sources.jar"/>
+	<classpathentry kind="lib" path="lib/reflections.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-api.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-jdk14.jar"/>
 	<classpathentry kind="lib" path="lib/validation-api.jar"/>
 	<classpathentry kind="lib" path="lib/xml-apis.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

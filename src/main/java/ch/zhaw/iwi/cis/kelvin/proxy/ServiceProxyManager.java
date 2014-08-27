@@ -1,12 +1,11 @@
 package ch.zhaw.iwi.cis.kelvin.proxy;
 
-import java.lang.reflect.Constructor;
+import java.lang.reflect.Proxy;
 import java.net.InetSocketAddress;
 
 import javax.security.auth.Subject;
 
-import __java.lang.__Class;
-import __java.lang.reflect.__Constructor;
+import ch.zhaw.iwi.cis.kelvin.service.Service;
 
 public class ServiceProxyManager
 {
@@ -24,14 +23,11 @@ public class ServiceProxyManager
 	{
 		return new ServiceProxyManager( serviceAddress, subject );
 	}
-	
+
 	@SuppressWarnings( "unchecked" )
-	public < T extends ServiceProxy > T createServiceProxy( Class< T > proxyClass )
+	public < T extends Service > T createServiceProxy( Class< T > serviceInterface )
 	{
-		Constructor< ? > constructor = __Class.getDeclaredConstructor( proxyClass, InetSocketAddress.class, Subject.class );
-		constructor.setAccessible( true );
-		T serviceProxy = (T)__Constructor.newInstance( constructor, serviceAddress, subject );
-		
-		return serviceProxy;
+		return (T)Proxy.newProxyInstance( Thread.currentThread().getContextClassLoader(), new Class< ? >[] { serviceInterface },
+			new ServiceProxyInvocationHandler( serviceAddress, serviceInterface, subject ) );
 	}
 }

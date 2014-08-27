@@ -20,9 +20,9 @@ public abstract class KelvinConfig
 	public static final int DEFAULT_WEB_SERVER_PORT = 8080;
 	public static final String DEFAULT_TEST_CLIENT_HOSTNAME = "localhost";
 	public static final int DEFAULT_TEST_CLIENT_PORT = 8080;
-	public static final int DEFAULT_TEST_CLIENT_PORT_WITH_PROXY = 8888;
-	public static final String DEFAULT_TEST_CLIENT_USER_NAME = "testuser";
-	public static final String DEFAULT_TEST_CLIENT_USER_PASSWORD = "testpassword";
+	public static final int DEFAULT_TEST_CLIENT_PORT_WITH_PROXY = 7777;
+	public static final String DEFAULT_TEST_CLIENT_USER_NAME = "test";
+	public static final String DEFAULT_TEST_CLIENT_USER_PASSWORD = "test";
 	
 	public static final String APPLICATION_HOME = KelvinConfig.class.getPackage().getName() + ".applicationHome";
 	public static final String BIN = "/bin";
@@ -101,8 +101,16 @@ public abstract class KelvinConfig
 		return subject;
 	}
 	
-	public abstract String getPersistenceUnitName();
+	public boolean isSecurityEnabled()
+	{
+		return true;
+	}
 	
+	public String getPersistenceUnitName()
+	{
+		return null;
+	}	
+
 	private static KelvinConfig config;
 
 	public static KelvinConfig getConfig()
