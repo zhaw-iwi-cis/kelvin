@@ -6,9 +6,6 @@
 	<taskdef resource="net/sf/antcontrib/antlib.xml"/>
 	<taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask" classpath="/opt/local/share/java/apache-ant/lib/ant-junit.jar"/>
 
-	<exec executable="svnversion" outputproperty="svnversion-temp" />
-	<propertyregex property="svnversion" input="${svnversion-temp}" regexp=":" replace="-"/>
-
 	<!-- PROPERTIES -->
 	<property name="ivy.cache" location="${user.home}/.ivy2"/>
 	<property name="lib" location="${basedir}/lib"/>
@@ -26,10 +23,10 @@
 	<property name="target.reports" location="${target}/reports"/>
 	<property name="target.javadoc" location="${target}/javadoc"/>
 
-	<property name="app.jar" location="${target}/${app.name}-${svnversion}.jar"/>
-	<property name="app-test.jar" location="${target}/${app.name}-test-${svnversion}.jar"/>
-	<property name="app-release.tar" location="${target}/${app.name}-release-${svnversion}.tar"/>
-	<property name="app-release.tar.gz" location="${target}/${app.name}-release-${svnversion}.tar.gz"/>
+	<property name="app.jar" location="${target}/${app.name}.jar"/>
+	<property name="app-test.jar" location="${target}/${app.name}-test.jar"/>
+	<property name="app-release.tar" location="${target}/${app.name}-release.tar"/>
+	<property name="app-release.tar.gz" location="${target}/${app.name}-release.tar.gz"/>
 
 	<!-- VARIABLE (OVERRIDABLE) PROPERTIES -->
 	<property name="test.scope" value="**/*Test.class"/>
