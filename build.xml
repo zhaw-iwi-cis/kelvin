@@ -4,9 +4,6 @@
 <project name="kelvin" default="package" xmlns:ivy="antlib:org.apache.ivy.ant">
 
 	<taskdef resource="net/sf/antcontrib/antlib.xml"/>
-
-	<exec executable="svnversion" outputproperty="svnversion-temp" />
-	<propertyregex property="svnversion" input="${svnversion-temp}" regexp=":" replace="-"/>
 	
 	<property name="ivy.cache" location="${user.home}/.ivy2"/>
 	<property name="lib" location="${basedir}/lib"/>
@@ -28,11 +25,11 @@
 	<property name="target.test.client" location="${target.test}/client/classes"/>
 	<property name="target.reports" location="${target}/reports"/>
 
-	<property name="kelvin.jar" location="${target}/${kelvin.name}-${svnversion}.jar"/>
-	<property name="kelvin-test-server.jar" location="${target}/${kelvin.name}-test-server-${svnversion}.jar"/>
-	<property name="kelvin-test-client.jar" location="${target}/${kelvin.name}-test-client-${svnversion}.jar"/>
-	<property name="kelvin-test.tar" location="${target}/${kelvin.name}-test-${svnversion}.tar"/>
-	<property name="kelvin-test.tar.gz" location="${target}/${kelvin.name}-test-${svnversion}.tar.gz"/>
+	<property name="kelvin.jar" location="${target}/${kelvin.name}.jar"/>
+	<property name="kelvin-test-server.jar" location="${target}/${kelvin.name}-test-server.jar"/>
+	<property name="kelvin-test-client.jar" location="${target}/${kelvin.name}-test-client.jar"/>
+	<property name="kelvin-test.tar" location="${target}/${kelvin.name}-test.tar"/>
+	<property name="kelvin-test.tar.gz" location="${target}/${kelvin.name}-test.tar.gz"/>
 	<property name="installed-test" location="${target}/installed-test"/>
 
 	<!-- VARIABLE (OVERRIDABLE) PROPERTIES -->
@@ -301,5 +298,6 @@
 	<target name="clean-ivy">
 		<delete dir="${ivy.cache}"/>
 	</target>
+
 
 </project>
