@@ -71,6 +71,7 @@
 	</path>
 
 	<target name="init-libs">
+        <!--TODO: move deflector generation to standalone project and add as dependency -->
 		<if>
 			<available file="${lib}/INIT-LIBS-FLAG"/>
 			<else>
