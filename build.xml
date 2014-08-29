@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE project>
 
-<project name="kelvin" default="package" xmlns:ivy="antlib:org.apache.ivy.ant">
+<project name="kelvin" default="package" xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
 
 	<taskdef resource="net/sf/antcontrib/antlib.xml"/>
+
+
+    <property name="version" value="0.1.0-SNAPSHOT" />
 	
 	<property name="ivy.cache" location="${user.home}/.ivy2"/>
 	<property name="lib" location="${basedir}/lib"/>
@@ -31,6 +34,20 @@
 	<property name="kelvin-test.tar" location="${target}/${kelvin.name}-test.tar"/>
 	<property name="kelvin-test.tar.gz" location="${target}/${kelvin.name}-test.tar.gz"/>
 	<property name="installed-test" location="${target}/installed-test"/>
+
+    <!-- define Maven coordinates -->
+    <!--Used for makepom: http://ant.apache.org/ivy/history/latest-milestone/use/makepom.html-->
+    <property name="groupId" value="ch.zhaw.sml" />
+    <property name="artifactId" value="${kelvin.name}" />
+    <property name="ivy.pom.name" value="Kelvin Project"/>
+    <property name="ivy.pom.groupId" value="${groupId}"/>
+
+    <!-- defined maven snapshots and staging repository id and url -->
+    <property name="pom.xml" location="${target}/pom.xml"/>
+    <property name="snapshot-repository-id" value="iwi-snapshots" />
+    <property name="snapshot-repository-url" value="http://yama.sml.zhaw.ch/nexus/content/repositories/snapshots" />
+    <property name="staging-repository-id" value="iwi-releases" />
+    <property name="staging-repository-url" value="http://yama.sml.zhaw.ch/nexus/content/repositories/releases" />
 
 	<!-- VARIABLE (OVERRIDABLE) PROPERTIES -->
 	<property name="test.scope" value="**/*Test.class"/>
@@ -299,5 +316,27 @@
 		<delete dir="${ivy.cache}"/>
 	</target>
 
+    <target name="prepare-deploy">
+        <ivy:makepom ivyfile="${basedir}/ivy.xml" pomfile="${pom.xml}" conf="default,runtime">
+            <mapping conf="default" scope="compile"/>
+            <mapping conf="runtime" scope="runtime"/>
+        </ivy:makepom>
+    </target>
+
+    <target name="deploy" depends="prepare-deploy">
+        <artifact:mvn>
+            <arg value="org.apache.maven.plugins:maven-deploy-plugin:2.6:deploy-file" />
+            <arg value="-Durl=${snapshot-repository-url}" />
+            <arg value="-DrepositoryId=${snapshot-repository-id}" />
+            <arg value="-DpomFile=${pom.xml}" />
+            <arg value="-Dfile=${kelvin.jar}" />
+        </artifact:mvn>
+    </target>
+
+    <target name="stage" depends="prepare-deploy">
+        <!--Staging to release repository goes here-->
+        <!--TODO: Implement-->
+        <!--See: https://docs.sonatype.org/display/Repository/Deploy+Snapshots+and+Stage+Releases+with+Ant-->
+    </target>
 
 </project>

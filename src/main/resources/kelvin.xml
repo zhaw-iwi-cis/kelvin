@@ -57,6 +57,8 @@
 		<mkdir dir="${target.reports}"/>
 		<mkdir dir="${target.javadoc}"/>
 
+        <ivy:retrieve pattern="${lib}/[artifact].[ext]"/>
+
 		<tstamp>
 			<format property="DSTAMP" pattern="yyyyMMdd"/>
 			<format property="TSTAMP" pattern="HHmmss"/>
@@ -160,6 +162,7 @@
 
 	<target name="clean-ivy">
 		<delete dir="${ivy.cache}"/>
+        <ivy:cleancache/>
 	</target>
 
 </project>
