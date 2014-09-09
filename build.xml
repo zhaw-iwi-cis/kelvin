@@ -77,7 +77,7 @@
 			<else>
 				<mkdir dir="${lib}"/>
 				<touch file="${lib}/INIT-LIBS-FLAG"/>
-				<ivy:retrieve pattern="${lib}/[artifact].[ext]"/>
+				<ivy:retrieve pattern="${lib}/[artifact].[ext]" conf="default"/>
 				<exec executable="deflector">
 					<arg line="-jar ${java.home}/lib/rt.jar"/>
 					<arg line="-includes java\..* javax\..* org\.ietf\..* org\.omg\..* org\.w3c\..* org\.xml\..*"/>

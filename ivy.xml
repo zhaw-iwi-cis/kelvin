@@ -31,51 +31,51 @@
 	
 	<info organisation="zhaw" module="kelvin" status="integration" revision="0.1.0-SNAPSHOT"/>
 
-    <configurations defaultconfmapping="default->default">
+	<configurations defaultconfmapping="default->default;runtime->runtime">
         <conf name="default" />
-        <conf name="build" description="Used during build process only" />
+        <conf name="runtime" />
     </configurations>
 	
 	<dependencies>
-		<dependency org="org.hibernate" name="hibernate-core" rev="&hibernate.revision;" conf="default"/>
-		<dependency org="org.hibernate" name="hibernate-entitymanager" rev="&hibernate.revision;" conf="default"/>
-		<dependency org="net.sf.flexjson" name="flexjson" rev="&flexjson.revision;" conf="default"/>
-		<dependency org="org.codehaus.jackson" name="jackson-core-asl" rev="&jackson.revision;" conf="default"/>
-		<dependency org="org.codehaus.jackson" name="jackson-mapper-asl" rev="&jackson.revision;" conf="default"/>
-		<dependency org="com.fasterxml.jackson.jaxrs" name="jackson-jaxrs-json-provider" rev="2.4.2" conf="default"/>
-		<dependency org="javax" name="javaee-web-api" rev="&jee.web.revision;" conf="default"/>
-		<dependency org="jstl" name="jstl" rev="&jstl.revision;" conf="default"/>
-		<dependency org="org.apache.derby" name="derby" rev="&derby.revision;" conf="default"/>
-		<dependency org="org.apache.derby" name="derbynet" rev="&derby.revision;" conf="default"/>
-		<dependency org="org.apache.derby" name="derbyclient" rev="&derby.revision;" conf="default"/>
-		<dependency org="junit" name="junit" rev="&junit.revision;" conf="default"/>
-		<dependency org="org.hamcrest" name="hamcrest-all" rev="&hamcrest.revision;" conf="default"/>
-		<dependency org="org.reflections" name="reflections" rev="&reflections.revision;" conf="default"/>
-		<dependency org="org.eclipse.jetty" name="jetty-server" rev="&jetty.revision;" conf="default"/>
-		<dependency org="org.eclipse.jetty" name="jetty-webapp" rev="&jetty.revision;" conf="default"/>
-		<dependency org="org.eclipse.jetty" name="jetty-servlet" rev="&jetty.revision;" conf="default"/>
-		<dependency org="org.glassfish.jersey.core" name="jersey-server" rev="&jersey.revision;" conf="default"/>
-		<dependency org="org.glassfish.jersey.core" name="jersey-common" rev="&jersey.revision;" conf="default"/>
-		<dependency org="org.glassfish.jersey.containers" name="jersey-container-servlet" rev="&jersey.revision;" conf="default"/>
-		<dependency org="org.glassfish.jersey.containers" name="jersey-container-servlet-core" rev="&jersey.revision;" conf="default"/>
-		<dependency org="commons-lang" name="commons-lang" rev="&commons.lang.revision;" conf="default"/>
-		<dependency org="commons-io" name="commons-io" rev="&commons.io.revision;" conf="default"/>
-		<dependency org="commons-configuration" name="commons-configuration" rev="&commons.configuration.revision;" conf="default"/>
-		<dependency org="commons-collections" name="commons-collections" rev="&commons.collections.revision;" conf="default"/>
-        <dependency org="org.aspectj" name="aspectjrt" rev="&org.aspectj.revision;" conf="default"/>
-        <dependency org="org.aspectj" name="aspectjtools" rev="&org.aspectj.revision;" conf="default"/>
-        <dependency org="org.aspectj" name="aspectjweaver" rev="&org.aspectj.revision;" conf="default"/>
-        <dependency org="org.slf4j" name="slf4j-api" rev="&org.slf4j.revision;" conf="default"/>
-        <dependency org="org.slf4j" name="slf4j-jdk14" rev="&org.slf4j.revision;" conf="default"/>
+		<dependency org="org.hibernate" name="hibernate-core" rev="&hibernate.revision;" conf="default,runtime"/>
+		<dependency org="org.hibernate" name="hibernate-entitymanager" rev="&hibernate.revision;" conf="default,runtime"/>
+		<dependency org="net.sf.flexjson" name="flexjson" rev="&flexjson.revision;" conf="default,runtime"/>
+		<dependency org="org.codehaus.jackson" name="jackson-core-asl" rev="&jackson.revision;" conf="default,runtime"/>
+		<dependency org="org.codehaus.jackson" name="jackson-mapper-asl" rev="&jackson.revision;" conf="default,runtime"/>
+		<dependency org="com.fasterxml.jackson.jaxrs" name="jackson-jaxrs-json-provider" rev="2.4.2" conf="default,runtime"/>
+		<dependency org="javax" name="javaee-web-api" rev="&jee.web.revision;" conf="default,runtime"/>
+		<dependency org="jstl" name="jstl" rev="&jstl.revision;" conf="default,runtime"/>
+		<dependency org="org.apache.derby" name="derby" rev="&derby.revision;" conf="default,runtime"/>
+		<dependency org="org.apache.derby" name="derbynet" rev="&derby.revision;" conf="default,runtime"/>
+		<dependency org="org.apache.derby" name="derbyclient" rev="&derby.revision;" conf="default,runtime"/>
+		<dependency org="junit" name="junit" rev="&junit.revision;" conf="default,runtime"/>
+		<dependency org="org.hamcrest" name="hamcrest-all" rev="&hamcrest.revision;" conf="default,runtime"/>
+		<dependency org="org.reflections" name="reflections" rev="&reflections.revision;" conf="default,runtime"/>
+		<dependency org="org.eclipse.jetty" name="jetty-server" rev="&jetty.revision;" conf="default,runtime"/>
+		<dependency org="org.eclipse.jetty" name="jetty-webapp" rev="&jetty.revision;" conf="default,runtime"/>
+		<dependency org="org.eclipse.jetty" name="jetty-servlet" rev="&jetty.revision;" conf="default,runtime"/>
+		<dependency org="org.glassfish.jersey.core" name="jersey-server" rev="&jersey.revision;" conf="default,runtime"/>
+		<dependency org="org.glassfish.jersey.core" name="jersey-common" rev="&jersey.revision;" conf="default,runtime"/>
+		<dependency org="org.glassfish.jersey.containers" name="jersey-container-servlet" rev="&jersey.revision;" conf="default,runtime"/>
+		<dependency org="org.glassfish.jersey.containers" name="jersey-container-servlet-core" rev="&jersey.revision;" conf="default,runtime"/>
+		<dependency org="commons-lang" name="commons-lang" rev="&commons.lang.revision;" conf="default,runtime"/>
+		<dependency org="commons-io" name="commons-io" rev="&commons.io.revision;" conf="default,runtime"/>
+		<dependency org="commons-configuration" name="commons-configuration" rev="&commons.configuration.revision;" conf="default,runtime"/>
+		<dependency org="commons-collections" name="commons-collections" rev="&commons.collections.revision;" conf="default,runtime"/>
+        <dependency org="org.aspectj" name="aspectjrt" rev="&org.aspectj.revision;" conf="default,runtime"/>
+        <dependency org="org.aspectj" name="aspectjtools" rev="&org.aspectj.revision;" conf="default,runtime"/>
+        <dependency org="org.aspectj" name="aspectjweaver" rev="&org.aspectj.revision;" conf="default,runtime"/>
+        <dependency org="org.slf4j" name="slf4j-api" rev="&org.slf4j.revision;" conf="default,runtime"/>
+        <dependency org="org.slf4j" name="slf4j-jdk14" rev="&org.slf4j.revision;" conf="default,runtime"/>
 
         <!--Libraries used for building only-->
 
-		<dependency org="commons-beanutils" name="commons-beanutils" rev="&commons.beanutils.revision;" conf="build"/>
-		<dependency org="commons-digester" name="commons-digester" rev="&commons.digester.revision;" conf="build"/>
-		<dependency org="org.apache.commons" name="commons-jexl" rev="&commons.jexl.revision;" conf="build"/>
-		<dependency org="org.apache.commons" name="commons-vfs2" rev="&commons.vfs2.revision;" conf="build"/>
-		<dependency org="xml-resolver" name="xml-resolver" rev="1.2" conf="build"/>
-		<dependency org="commons-jxpath" name="commons-jxpath" rev="1.3" conf="build"/>
+		<dependency org="commons-beanutils" name="commons-beanutils" rev="&commons.beanutils.revision;" conf="default"/>
+		<dependency org="commons-digester" name="commons-digester" rev="&commons.digester.revision;" conf="default"/>
+		<dependency org="org.apache.commons" name="commons-jexl" rev="&commons.jexl.revision;" conf="default"/>
+		<dependency org="org.apache.commons" name="commons-vfs2" rev="&commons.vfs2.revision;" conf="default"/>
+		<dependency org="xml-resolver" name="xml-resolver" rev="1.2" conf="default"/>
+		<dependency org="commons-jxpath" name="commons-jxpath" rev="1.3" conf="default"/>
 		<exclude module="persistence-api"/>
 	</dependencies>
 	
