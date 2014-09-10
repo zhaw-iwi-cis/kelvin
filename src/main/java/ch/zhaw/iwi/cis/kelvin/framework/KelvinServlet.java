@@ -42,7 +42,7 @@ public class KelvinServlet extends HttpServlet
 		}
 		catch ( Throwable t )
 		{
-			javaServiceResponse = new JavaServiceResponse( t );
+			javaServiceResponse = new JavaServiceResponse( JavaServiceRequest.createWrappingException( t ) );
 		}
 
 		JsonServiceResponse jsonServiceResponse = JsonServiceResponse.getJsonServiceResponse( javaServiceResponse );

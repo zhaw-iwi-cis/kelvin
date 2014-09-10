@@ -35,7 +35,7 @@ public class ServiceProxyInvocationHandler implements InvocationHandler
 	{
 		if ( args == null )
 			args = new Object[] {};
-		
+
 		JavaServiceRequest javaServiceRequest = new JavaServiceRequest( serviceInterface, method, args );
 		JsonServiceRequest jsonServiceRequest = JsonServiceRequest.getJsonServiceRequest( javaServiceRequest );
 		JsonServiceResponse jsonServiceResponse = jsonServiceRequest.invoke( serverAddress, principal, credential );
@@ -44,6 +44,6 @@ public class ServiceProxyInvocationHandler implements InvocationHandler
 		if ( javaServiceResponse.getException() != null )
 			throw javaServiceResponse.getException();
 		
-		return javaServiceResponse.getRetVal();
+		return javaServiceResponse.getReturnValue();
 	}
 }

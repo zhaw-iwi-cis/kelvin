@@ -3,6 +3,8 @@ package ch.zhaw.iwi.cis.kelvin.framework;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import __java.lang.reflect.__InvocationTargetException;
 import __java.lang.reflect.__Method;
@@ -10,6 +12,8 @@ import ch.zhaw.iwi.cis.kelvin.framework.service.ServiceRegistry;
 
 public class JavaServiceRequest extends ServiceRequest
 {
+	public static Logger logger = Logger.getLogger( JavaServiceRequest.class.getName() );
+	
 	private Class< ? > serviceInterface;
 	private Object serviceInstance;
 	private Method serviceMethod;
@@ -35,7 +39,7 @@ public class JavaServiceRequest extends ServiceRequest
 	{
 		Object serviceInstance = getService( jsonServiceRequest.getServiceName() );
 		Method serviceMethod = getServiceMethod( serviceInstance, jsonServiceRequest.getServiceMethod() );
-		Object[] serviceArgs = getServiceArgs( jsonServiceRequest.getServiceArgs() );
+		Object[] serviceArgs = getServiceArgs( jsonServiceRequest.getServiceRequestPayload() );
 		
 		return new JavaServiceRequest( serviceInstance, serviceMethod, serviceArgs );
 	}
@@ -67,16 +71,16 @@ public class JavaServiceRequest extends ServiceRequest
 		return matchingMethods.get( 0 );
 	}
 
-	private static Object[] getServiceArgs( String serviceArgs )
+	private static Object[] getServiceArgs( String serviceRequestPayloadAsString )
 	{
-		Object[] extractedServiceArgs = null;
+		ServiceRequestPayload serviceRequestPayload = null;
 		
-		if ( serviceArgs.isEmpty() )
-			extractedServiceArgs = new Object[] {};
+		if ( serviceRequestPayloadAsString.isEmpty() )
+			serviceRequestPayload = new ServiceRequestPayload();
 		else
-			extractedServiceArgs = readValue( serviceArgs, Object[].class );
+			serviceRequestPayload = readValue( serviceRequestPayloadAsString, ServiceRequestPayload.class );
 		
-		return extractedServiceArgs;
+		return serviceRequestPayload.getServiceArgs().toArray( new Object[] {} );
 	}
 
 	public JavaServiceResponse invoke()
@@ -90,20 +94,25 @@ public class JavaServiceRequest extends ServiceRequest
 		}
 		catch ( __InvocationTargetException e )
 		{
-			serviceResponse = new JavaServiceResponse( e.getCause() );
+			serviceResponse = new JavaServiceResponse( createWrappingException( e.getCause() ) );
 		}
 		catch ( Throwable e )
 		{
-			serviceResponse = new JavaServiceResponse( e );
+			serviceResponse = new JavaServiceResponse( createWrappingException( e ) );
 		}
 		
 		return serviceResponse;
 	}
 	
-	public JsonServiceRequest getJsonServiceRequest( JavaServiceRequest javaServiceRequest )
+	public static Exception createWrappingException( Throwable t )
 	{
-		// TODO implement
-		return null;
+		logger.log( Level.SEVERE, "Exception caught while invoking service method.", t );
+
+		RuntimeException exception = new RuntimeException(
+			"Exception caught while invoking service method (see " + KelvinConfig.getConfig().getLogDir() + " for more details). Original message: " + t.getMessage()
+			);
+
+		return exception;
 	}
 	
 	public Object getServiceInstance()

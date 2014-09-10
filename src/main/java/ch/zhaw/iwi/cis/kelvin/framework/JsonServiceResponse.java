@@ -18,12 +18,7 @@ public class JsonServiceResponse extends ServiceRequest
 	
 	public static JsonServiceResponse getJsonServiceResponse( JavaServiceResponse javaServiceResponse )
 	{
-		Object[] retValOrException = new Object[] {
-			javaServiceResponse.getRetVal(),
-			javaServiceResponse.getException()
-		};
-		
-		return new JsonServiceResponse( writeValueAsString( retValOrException ) );
+		return new JsonServiceResponse( writeValueAsString( new ServiceResponsePayload( javaServiceResponse.getReturnValue(), javaServiceResponse.getException() ) ) );
 	}
 
 	public void putJsonServiceResponse( HttpServletResponse response )

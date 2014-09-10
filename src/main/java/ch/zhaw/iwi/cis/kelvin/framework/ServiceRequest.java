@@ -13,7 +13,7 @@ public class ServiceRequest
 	{
 		mapper.configure( SerializationFeature.FAIL_ON_EMPTY_BEANS, false );
 		mapper.configure( SerializationFeature.INDENT_OUTPUT, true );
-		mapper.enableDefaultTypingAsProperty( ObjectMapper.DefaultTyping.NON_FINAL, "class" );
+		mapper.enableDefaultTypingAsProperty( ObjectMapper.DefaultTyping.JAVA_LANG_OBJECT, "class" );
 	}
 
 	// TODO Fix probable bug in deflector that prevents this method from being generated.

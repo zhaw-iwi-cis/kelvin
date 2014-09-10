@@ -27,23 +27,23 @@ public class JsonServiceRequest extends ServiceRequest
 {
 	private String serviceName;
 	private String serviceMethod;
-	private String serviceArgs;
+	private String serviceRequestPayload;
 
-	private JsonServiceRequest( String serviceName, String serviceMethod, String serviceArgs )
+	private JsonServiceRequest( String serviceName, String serviceMethod, String serviceRequestPayload )
 	{
 		super();
 		this.serviceName = serviceName;
 		this.serviceMethod = serviceMethod;
-		this.serviceArgs = serviceArgs;
+		this.serviceRequestPayload = serviceRequestPayload;
 	}
 
 	public static JsonServiceRequest getJsonServiceRequest( JavaServiceRequest javaServiceRequest )
 	{
 		String serviceName = javaServiceRequest.getServiceInterface().getSimpleName();
 		String serviceMethod = javaServiceRequest.getServiceMethod().getName();
-		String serviceArgs = writeValueAsString( javaServiceRequest.getServiceArgs() );
+		String serviceRequestPayload = writeValueAsString( new ServiceRequestPayload( javaServiceRequest.getServiceArgs() ) );
 
-		return new JsonServiceRequest( serviceName, serviceMethod, serviceArgs );
+		return new JsonServiceRequest( serviceName, serviceMethod, serviceRequestPayload );
 	}
 	
 	public static JsonServiceRequest getJsonServiceRequest( HttpServletRequest servletRequest )
@@ -51,9 +51,9 @@ public class JsonServiceRequest extends ServiceRequest
 		List< String > pathElementsAsList = getServiceNameAndMethod( servletRequest );
 		String serviceName = pathElementsAsList.get( 0 );
 		String serviceMethod = pathElementsAsList.get( 1 );
-		String serviceArgs = getServiceArgs( servletRequest );
+		String serviceRequestPayload = getServiceRequestPayload( servletRequest );
 		
-		return new JsonServiceRequest( serviceName, serviceMethod, serviceArgs );
+		return new JsonServiceRequest( serviceName, serviceMethod, serviceRequestPayload );
 	}
 	
 	private static List< String > getServiceNameAndMethod( HttpServletRequest servletRequest )
@@ -69,16 +69,16 @@ public class JsonServiceRequest extends ServiceRequest
 		return pathElementsAsList;
 	}
 	
-	private static String getServiceArgs( HttpServletRequest servletRequest )
+	private static String getServiceRequestPayload( HttpServletRequest servletRequest )
 	{
 		Reader reader = __ServletRequest.getReader( servletRequest );
 		Writer writer = new StringWriter();
 		
 		__IOUtils.copy( null, reader, writer );
 		__Writer.close( writer );
-		String serviceArgs = writer.toString();
+		String serviceRequestPayload = writer.toString();
 		
-		return serviceArgs;
+		return serviceRequestPayload;
 	}
 	
 	public JsonServiceResponse invoke( InetSocketAddress serverAddress, BasicAuthPrincipal principal, BasicAuthCredential credential )
@@ -109,7 +109,7 @@ public class JsonServiceRequest extends ServiceRequest
 	private void sendRequest( HttpURLConnection connection )
 	{
 		PrintWriter printWriter = new PrintWriter( __URLConnection.getOutputStream( connection ) );
-		printWriter.println( serviceArgs );
+		printWriter.println( serviceRequestPayload );
 		printWriter.flush();
 	}
 	
@@ -142,13 +142,13 @@ public class JsonServiceRequest extends ServiceRequest
 		this.serviceMethod = serviceMethod;
 	}
 
-	public String getServiceArgs()
+	public String getServiceRequestPayload()
 	{
-		return serviceArgs;
+		return serviceRequestPayload;
 	}
 
-	public void setServiceArgs( String serviceArgs )
+	public void setServiceRequestPayload( String serviceRequestPayload )
 	{
-		this.serviceArgs = serviceArgs;
+		this.serviceRequestPayload = serviceRequestPayload;
 	}
 }

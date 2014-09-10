@@ -1,45 +1,44 @@
 package ch.zhaw.iwi.cis.kelvin.framework;
 
+
 public class JavaServiceResponse extends ServiceRequest
 {
-	private Object retVal;
+	private Object returnValue;
 	private Throwable exception;
 	
-	public JavaServiceResponse( Object retVal )
+	public JavaServiceResponse( Object returnValue )
 	{
-		super();
-		this.retVal = retVal;
+		this( returnValue, null );
 	}
 	
 	public JavaServiceResponse( Throwable exception )
 	{
-		super();
-		this.exception = exception;
+		this( null, exception );
 	}
 	
-	public JavaServiceResponse( Object[] retValOrException )
+	public JavaServiceResponse( Object returnValue, Throwable exception )
 	{
 		super();
-		this.retVal = retValOrException[ 0 ];
-		this.exception = (Throwable)retValOrException[ 1 ];
+		this.returnValue = returnValue;
+		this.exception = exception;
 	}
 	
 	public static JavaServiceResponse getJavaServiceResponse( JsonServiceResponse jsonServiceResponse )
 	{
-		Object[] retValOrException = readValue( jsonServiceResponse.getServiceReturnValueOrException(), Object[].class );
-		JavaServiceResponse response = new JavaServiceResponse( retValOrException );
+		ServiceResponsePayload serviceResponsePayload = readValue( jsonServiceResponse.getServiceReturnValueOrException(), ServiceResponsePayload.class );
+		JavaServiceResponse response = new JavaServiceResponse( serviceResponsePayload.getReturnValue(), serviceResponsePayload.getException() );
 		
 		return response;
 	}
 
-	public Object getRetVal()
+	public Object getReturnValue()
 	{
-		return retVal;
+		return returnValue;
 	}
 
-	public void setRetVal( Object retVal )
+	public void setReturnValue( Object returnValue )
 	{
-		this.retVal = retVal;
+		this.returnValue = returnValue;
 	}
 
 	public Throwable getException()

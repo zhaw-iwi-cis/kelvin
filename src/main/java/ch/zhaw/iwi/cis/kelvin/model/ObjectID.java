@@ -5,6 +5,15 @@ import java.util.UUID;
 
 import javax.persistence.Embeddable;
 
+import ch.zhaw.iwi.cis.kelvin.framework.KelvinObjectIDResolver;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
+
+@JsonTypeInfo( use = com.fasterxml.jackson.annotation.JsonTypeInfo.Id.CLASS, include = As.PROPERTY, property = "class" )
+@JsonIdentityInfo( generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", resolver = KelvinObjectIDResolver.class )
 @Embeddable
 public class ObjectID implements Serializable
 {
