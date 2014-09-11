@@ -5,7 +5,6 @@
 
 	<taskdef resource="net/sf/antcontrib/antlib.xml"/>
 
-
     <property name="version" value="0.1.0-SNAPSHOT" />
 	
 	<property name="ivy.cache" location="${user.home}/.ivy2"/>
