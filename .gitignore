@@ -36,3 +36,7 @@ Temporary Items
 .idea
 *.iml
 /bin/
+
+
+### General ###
+/lib/
