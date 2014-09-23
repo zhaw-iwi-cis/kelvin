@@ -67,6 +67,17 @@
         <dependency org="org.aspectj" name="aspectjweaver" rev="&org.aspectj.revision;" conf="default,runtime"/>
         <dependency org="org.slf4j" name="slf4j-api" rev="&org.slf4j.revision;" conf="default,runtime"/>
         <dependency org="org.slf4j" name="slf4j-jdk14" rev="&org.slf4j.revision;" conf="default,runtime"/>
+        <dependency org="__java" name="__rt" rev="1.7.0_67-RELEASE" conf="default,runtime"/>
+        <dependency org="__javax.servlet" name="__javax.servlet-api" rev="3.1.0-RELEASE" conf="default,runtime"/>
+        <dependency org="__org.apache.derby" name="__derby" rev="&derby.revision;-RELEASE" conf="default,runtime"/>
+        <dependency org="__org.apache.derby" name="__derbynet" rev="&derby.revision;-RELEASE" conf="default,runtime"/>
+        <dependency org="__org.eclipse.jetty" name="__jetty-server" rev="&jetty.revision;-RELEASE" conf="default,runtime"/>
+        <dependency org="__org.eclipse.jetty" name="__jetty-util" rev="&jetty.revision;-RELEASE" conf="default,runtime"/>
+        <dependency org="__commons-lang" name="__commons-lang" rev="&commons.lang.revision;-RELEASE" conf="default,runtime"/>
+        <dependency org="__commons-configuration" name="__commons-configuration" rev="&commons.configuration.revision;-RELEASE" conf="default,runtime"/>
+        <dependency org="__commons-io" name="__commons-io" rev="&commons.io.revision;-RELEASE" conf="default,runtime"/>
+        <dependency org="__com.fasterxml.jackson.core" name="__jackson-core" rev="2.4.2-RELEASE" conf="default,runtime"/>
+        <dependency org="__com.fasterxml.jackson.core" name="__jackson-annotations" rev="2.4.0-RELEASE" conf="default,runtime"/>
 
         <!--Libraries used for building only-->
 
