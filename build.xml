@@ -78,24 +78,6 @@
 				<mkdir dir="${lib}"/>
 				<touch file="${lib}/INIT-LIBS-FLAG"/>
 				<ivy:retrieve pattern="${lib}/[artifact].[ext]" conf="default"/>
-				<!-- We are deleting these libs here because they are not actually needed to
-				     execute the application; their purpose is mostly to satisfy deflector
-				     dependencies. -->
-				<delete>
-					<zipfileset dir="${lib}">
-						<include name="commons-vfs2.jar"/>
-						<include name="commons-beanutils.jar"/>
-						<include name="commons-digester.jar"/>
-						<include name="commons-jexl.jar"/>
-						<include name="commons-jxpath.jar"/>
-						<include name="maven-scm-api.jar"/>
-						<include name="maven-scm-provider-svn-commons.jar"/>
-						<include name="maven-scm-provider-svnexe.jar"/>
-						<include name="plexus-utils.jar"/>
-						<include name="regexp.jar"/>
-						<include name="xml-resolver.jar"/>
-					</zipfileset>
-				</delete>
 			</else>
 		</if>
 	</target>
