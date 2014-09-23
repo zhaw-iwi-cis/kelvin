@@ -45,22 +45,16 @@
 		<dependency org="com.fasterxml.jackson.jaxrs" name="jackson-jaxrs-json-provider" rev="2.4.2" conf="default,runtime"/>
 		<dependency org="javax" name="javaee-web-api" rev="&jee.web.revision;" conf="default,runtime"/>
 		<dependency org="jstl" name="jstl" rev="&jstl.revision;" conf="default,runtime"/>
-		<dependency org="org.apache.derby" name="derby" rev="&derby.revision;" conf="default,runtime"/>
-		<dependency org="org.apache.derby" name="derbynet" rev="&derby.revision;" conf="default,runtime"/>
 		<dependency org="org.apache.derby" name="derbyclient" rev="&derby.revision;" conf="default,runtime"/>
 		<dependency org="junit" name="junit" rev="&junit.revision;" conf="default,runtime"/>
 		<dependency org="org.hamcrest" name="hamcrest-all" rev="&hamcrest.revision;" conf="default,runtime"/>
 		<dependency org="org.reflections" name="reflections" rev="&reflections.revision;" conf="default,runtime"/>
-		<dependency org="org.eclipse.jetty" name="jetty-server" rev="&jetty.revision;" conf="default,runtime"/>
 		<dependency org="org.eclipse.jetty" name="jetty-webapp" rev="&jetty.revision;" conf="default,runtime"/>
 		<dependency org="org.eclipse.jetty" name="jetty-servlet" rev="&jetty.revision;" conf="default,runtime"/>
 		<dependency org="org.glassfish.jersey.core" name="jersey-server" rev="&jersey.revision;" conf="default,runtime"/>
 		<dependency org="org.glassfish.jersey.core" name="jersey-common" rev="&jersey.revision;" conf="default,runtime"/>
 		<dependency org="org.glassfish.jersey.containers" name="jersey-container-servlet" rev="&jersey.revision;" conf="default,runtime"/>
 		<dependency org="org.glassfish.jersey.containers" name="jersey-container-servlet-core" rev="&jersey.revision;" conf="default,runtime"/>
-		<dependency org="commons-lang" name="commons-lang" rev="&commons.lang.revision;" conf="default,runtime"/>
-		<dependency org="commons-io" name="commons-io" rev="&commons.io.revision;" conf="default,runtime"/>
-		<dependency org="commons-configuration" name="commons-configuration" rev="&commons.configuration.revision;" conf="default,runtime"/>
 		<dependency org="commons-collections" name="commons-collections" rev="&commons.collections.revision;" conf="default,runtime"/>
         <dependency org="org.aspectj" name="aspectjrt" rev="&org.aspectj.revision;" conf="default,runtime"/>
         <dependency org="org.aspectj" name="aspectjtools" rev="&org.aspectj.revision;" conf="default,runtime"/>
