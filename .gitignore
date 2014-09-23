@@ -35,8 +35,12 @@ Temporary Items
 ### IntelliJ ###
 .idea
 *.iml
+<<<<<<< HEAD
 /bin/
 
 
 ### General ###
 /lib/
+=======
+
+>>>>>>> refs/heads/permission-test

@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import ch.zhaw.iwi.cis.kelvin.model.IdentifiableObject;
+import ch.zhaw.iwi.cis.kelvin.model.PersistentObject;
 
 
-public class TestClassA extends IdentifiableObject
+public class TestClassA extends PersistentObject
 {
 	private static final long serialVersionUID = 1L;
 	

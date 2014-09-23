@@ -7,44 +7,44 @@ import javax.transaction.Transactional;
 
 import ch.zhaw.iwi.cis.kelvin.framework.KelvinConfig;
 import ch.zhaw.iwi.cis.kelvin.framework.service.ServiceRegistry;
-import ch.zhaw.iwi.cis.kelvin.model.IdentifiableObject;
 import ch.zhaw.iwi.cis.kelvin.model.ObjectID;
+import ch.zhaw.iwi.cis.kelvin.model.PersistentObject;
 
 @Transactional
-public abstract class IdentifiableObjectDaoImpl implements IdentifiableObjectDao
+public abstract class PersistentObjectDaoImpl implements PersistentObjectDao
 {
 	private EntityManager entityManager = ServiceRegistry.getRegistry().getService( KelvinConfig.getConfig().getPersistenceUnitName() );
 
-	public < T extends IdentifiableObject > void persist( T object )
+	public < T extends PersistentObject > void persist( T object )
 	{
-		IdentifiableObject objectMerged = merge( object );
+		PersistentObject objectMerged = merge( object );
 		entityManager.persist( objectMerged );
 	}
 
-	public < T extends IdentifiableObject > void remove( T object )
+	public < T extends PersistentObject > void remove( T object )
 	{
-		IdentifiableObject objectMerged = entityManager.merge( object );
+		PersistentObject objectMerged = entityManager.merge( object );
 		entityManager.remove( objectMerged );
 	}
 
-	public < T extends IdentifiableObject > T merge( T object )
+	public < T extends PersistentObject > T merge( T object )
 	{
 		return entityManager.merge( object );
 	}
 
 	@SuppressWarnings( "unchecked" )
-	public < T extends IdentifiableObject > T findById( ObjectID id )
+	public < T extends PersistentObject > T findById( ObjectID id )
 	{
 		return (T)entityManager.find( getPersistentObjectClass(), id );
 	}
 
 	@SuppressWarnings( "unchecked" )
-	public < T extends IdentifiableObject > List< T > findByAll( Class< T > clazz )
+	public < T extends PersistentObject > List< T > findByAll( Class< T > clazz )
 	{
 		return entityManager.createQuery( "from " + clazz.getName() ).getResultList();
 	}
 
-	protected abstract Class< ? extends IdentifiableObject > getPersistentObjectClass();
+	protected abstract Class< ? extends PersistentObject > getPersistentObjectClass();
 
 	protected EntityManager getEntityManager()
 	{

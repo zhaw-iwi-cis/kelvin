@@ -1,8 +1,8 @@
 package ch.zhaw.iwi.cis.kelvin.test.server;
 
-import ch.zhaw.iwi.cis.kelvin.model.IdentifiableObject;
+import ch.zhaw.iwi.cis.kelvin.model.PersistentObject;
 
-public class TestClassB extends IdentifiableObject
+public class TestClassB extends PersistentObject
 {
 	private static final long serialVersionUID = 1L;
 	
