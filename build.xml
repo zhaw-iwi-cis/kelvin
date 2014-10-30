@@ -5,7 +5,7 @@
 
 	<taskdef resource="net/sf/antcontrib/antlib.xml"/>
 
-    <property name="version" value="0.1.0-SNAPSHOT" />
+    <property name="version" value="0.1.2-SNAPSHOT" />
 	
 	<property name="ivy.cache" location="${user.home}/.ivy2"/>
 	<property name="lib" location="${basedir}/lib"/>
@@ -38,6 +38,7 @@
     <!--Used for makepom: http://ant.apache.org/ivy/history/latest-milestone/use/makepom.html-->
     <property name="groupId" value="ch.zhaw.sml" />
     <property name="artifactId" value="${kelvin.name}" />
+    <property name="ivy.pom.version" value="${version}"/>
     <property name="ivy.pom.name" value="Kelvin Project"/>
     <property name="ivy.pom.groupId" value="${groupId}"/>
 
