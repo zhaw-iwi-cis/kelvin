@@ -29,7 +29,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
 	
-	<info organisation="zhaw" module="kelvin" status="integration" revision="0.1.0-SNAPSHOT"/>
+	<info organisation="zhaw" module="kelvin" status="integration"/>
 
 	<configurations defaultconfmapping="default->default;runtime->runtime">
         <conf name="default" />
