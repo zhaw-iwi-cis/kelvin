@@ -30,7 +30,6 @@ public abstract class PersistentObjectServiceImpl implements PersistentObjectSer
 		return getPersistentObjectObjectDao().findById( id );
 	}
 	
-	// NEW:
 	@Override
 	@SuppressWarnings("unchecked")
 	public < T extends PersistentObject > List< T > findByAll( String className ) {

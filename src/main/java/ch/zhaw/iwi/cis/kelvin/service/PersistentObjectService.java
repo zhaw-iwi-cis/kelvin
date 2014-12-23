@@ -12,6 +12,5 @@ public interface PersistentObjectService extends Service
 	public <T extends PersistentObject> void remove(T object);
 	public <T extends PersistentObject> T findByID(ObjectID id);
 	
-	// NEW:
 	public < T extends PersistentObject > List < T > findByAll( String className );
 }

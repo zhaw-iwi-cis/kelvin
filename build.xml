@@ -3,247 +3,228 @@
 
 <project name="kelvin" default="package" xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
 
-	<taskdef resource="net/sf/antcontrib/antlib.xml"/>
+	<taskdef resource="net/sf/antcontrib/antlib.xml" />
 
-    <property name="version" value="0.1.2-SNAPSHOT" />
-	
-	<property name="ivy.cache" location="${user.home}/.ivy2"/>
-	<property name="lib" location="${basedir}/lib"/>
-	<property name="kelvin.name" value="${ant.project.name}"/>
+	<property name="version" value="0.1.2-SNAPSHOT" />
 
-	<property name="src" location="${basedir}/src"/>
-	<property name="src.main.java" location="${src}/main/java"/>
-	<property name="src.main.resources" location="${src}/main/resources"/>
-	<property name="src.test" location="${src}/test"/>
-	<property name="src.test.server.java" location="${src.test}/server/java"/>
-	<property name="src.test.server.resources" location="${src.test}/server/resources"/>
-	<property name="src.test.client.java" location="${src.test}/client/java"/>
-	<property name="src.test.client.resources" location="${src.test}/client/resources"/>
+	<property name="ivy.cache" location="${user.home}/.ivy2" />
+	<property name="lib" location="${basedir}/lib" />
+	<property name="kelvin.name" value="${ant.project.name}" />
 
-	<property name="target" location="${basedir}/target"/>
-	<property name="target.main" location="${target}/main/classes"/>
-	<property name="target.test" location="${target}/test"/>
-	<property name="target.test.server" location="${target.test}/server/classes"/>
-	<property name="target.test.client" location="${target.test}/client/classes"/>
-	<property name="target.reports" location="${target}/reports"/>
+	<property name="src" location="${basedir}/src" />
+	<property name="src.main.java" location="${src}/main/java" />
+	<property name="src.main.resources" location="${src}/main/resources" />
+	<property name="src.test" location="${src}/test" />
+	<property name="src.test.server.java" location="${src.test}/server/java" />
+	<property name="src.test.server.resources" location="${src.test}/server/resources" />
+	<property name="src.test.client.java" location="${src.test}/client/java" />
+	<property name="src.test.client.resources" location="${src.test}/client/resources" />
 
-	<property name="kelvin.jar" location="${target}/${kelvin.name}.jar"/>
-	<property name="kelvin-test-server.jar" location="${target}/${kelvin.name}-test-server.jar"/>
-	<property name="kelvin-test-client.jar" location="${target}/${kelvin.name}-test-client.jar"/>
-	<property name="kelvin-test.tar" location="${target}/${kelvin.name}-test.tar"/>
-	<property name="kelvin-test.tar.gz" location="${target}/${kelvin.name}-test.tar.gz"/>
-	<property name="installed-test" location="${target}/installed-test"/>
+	<property name="target" location="${basedir}/target" />
+	<property name="target.main" location="${target}/main/classes" />
+	<property name="target.test" location="${target}/test" />
+	<property name="target.test.server" location="${target.test}/server/classes" />
+	<property name="target.test.client" location="${target.test}/client/classes" />
+	<property name="target.reports" location="${target}/reports" />
 
-    <!-- define Maven coordinates -->
-    <!--Used for makepom: http://ant.apache.org/ivy/history/latest-milestone/use/makepom.html-->
-    <property name="groupId" value="ch.zhaw.sml" />
-    <property name="artifactId" value="${kelvin.name}" />
-    <property name="ivy.pom.version" value="${version}"/>
-    <property name="ivy.pom.name" value="Kelvin Project"/>
-    <property name="ivy.pom.groupId" value="${groupId}"/>
+	<property name="kelvin.jar" location="${target}/${kelvin.name}.jar" />
+	<property name="kelvin-test-server.jar" location="${target}/${kelvin.name}-test-server.jar" />
+	<property name="kelvin-test-client.jar" location="${target}/${kelvin.name}-test-client.jar" />
+	<property name="kelvin-test.tar" location="${target}/${kelvin.name}-test.tar" />
+	<property name="kelvin-test.tar.gz" location="${target}/${kelvin.name}-test.tar.gz" />
+	<property name="installed-test" location="${target}/installed-test" />
 
-    <!-- defined maven snapshots and staging repository id and url -->
-    <property name="pom.xml" location="${target}/pom.xml"/>
-    <property name="snapshot-repository-id" value="iwi-snapshots" />
-    <property name="snapshot-repository-url" value="http://yama.sml.zhaw.ch/nexus/content/repositories/snapshots" />
-    <property name="staging-repository-id" value="iwi-releases" />
-    <property name="staging-repository-url" value="http://yama.sml.zhaw.ch/nexus/content/repositories/releases" />
+	<!-- define Maven coordinates -->
+	<!--Used for makepom: http://ant.apache.org/ivy/history/latest-milestone/use/makepom.html-->
+	<property name="groupId" value="ch.zhaw.sml" />
+	<property name="artifactId" value="${kelvin.name}" />
+	<property name="ivy.pom.version" value="${version}" />
+	<property name="ivy.pom.name" value="Kelvin Project" />
+	<property name="ivy.pom.groupId" value="${groupId}" />
+
+	<!-- defined maven snapshots and staging repository id and url -->
+	<property name="pom.xml" location="${target}/pom.xml" />
+	<property name="snapshot-repository-id" value="iwi-snapshots" />
+	<property name="snapshot-repository-url" value="http://yama.sml.zhaw.ch/nexus/content/repositories/snapshots" />
+	<property name="staging-repository-id" value="iwi-releases" />
+	<property name="staging-repository-url" value="http://yama.sml.zhaw.ch/nexus/content/repositories/releases" />
 
 	<!-- VARIABLE (OVERRIDABLE) PROPERTIES -->
-	<property name="test.scope" value="**/*Test.class"/>
-	<property name="debug" value="false"/>
-	
+	<property name="test.scope" value="**/*Test.class" />
+	<property name="debug" value="false" />
+
 	<path id="libs.main">
 		<fileset dir="${lib}">
-			<include name="**/*.jar"/>
+			<include name="**/*.jar" />
 		</fileset>
 	</path>
 
 	<path id="libs.test.server">
-		<path refid="libs.main"/>
-		<pathelement location="${kelvin.jar}"/>
-		<pathelement location="${kelvin-test-server.jar}"/>
+		<path refid="libs.main" />
+		<pathelement location="${kelvin.jar}" />
+		<pathelement location="${kelvin-test-server.jar}" />
 	</path>
 
 	<path id="libs.test.client">
-		<path refid="libs.test.server"/>
-		<pathelement location="${kelvin-test-client.jar}"/>
+		<path refid="libs.test.server" />
+		<pathelement location="${kelvin-test-client.jar}" />
 	</path>
 
 	<target name="init-libs">
-        <!--TODO: move deflector generation to standalone project and add as dependency -->
+		<!--TODO: move deflector generation to standalone project and add as dependency -->
 		<if>
-			<available file="${lib}/INIT-LIBS-FLAG"/>
+			<available file="${lib}/INIT-LIBS-FLAG" />
 			<else>
-				<mkdir dir="${lib}"/>
-				<touch file="${lib}/INIT-LIBS-FLAG"/>
-				<ivy:retrieve pattern="${lib}/[artifact].[ext]" conf="default"/>
+				<mkdir dir="${lib}" />
+				<touch file="${lib}/INIT-LIBS-FLAG" />
+				<ivy:retrieve pattern="${lib}/[artifact].[ext]" conf="default" />
 			</else>
 		</if>
 	</target>
-	
+
 	<target name="init" depends="init-libs">
-		<mkdir dir="${target.main}"/>
-		<mkdir dir="${target.test.server}"/>
-		<mkdir dir="${target.test.client}"/>
-		<mkdir dir="${target.reports}"/>
+		<mkdir dir="${target.main}" />
+		<mkdir dir="${target.test.server}" />
+		<mkdir dir="${target.test.client}" />
+		<mkdir dir="${target.reports}" />
 		<tstamp>
-			<format property="DSTAMP" pattern="yyyyMMdd"/>
-			<format property="TSTAMP" pattern="HHmmss"/>
+			<format property="DSTAMP" pattern="yyyyMMdd" />
+			<format property="TSTAMP" pattern="HHmmss" />
 		</tstamp>
 		<tstamp>
-			<format property="tstamp.build" pattern="dd.MM.yyyy HH:mm"/>
+			<format property="tstamp.build" pattern="dd.MM.yyyy HH:mm" />
 		</tstamp>
 		<if>
-			<equals arg1="${debug}" arg2="true"/>
+			<equals arg1="${debug}" arg2="true" />
 			<then>
-				<property name="debug.arg"
-			value="-agentlib:jdwp=transport=dt_socket,address=8001,server=y,suspend=y"/>
+				<property name="debug.arg" value="-agentlib:jdwp=transport=dt_socket,address=8001,server=y,suspend=y" />
 			</then>
 			<else>
-				<property name="debug.arg" value=""/>
+				<property name="debug.arg" value="" />
 			</else>
 		</if>
 	</target>
 
 	<target name="compile.main" depends="init">
-		<javac
-			includeantruntime="false"
-			srcdir="${src.main.java}"
-			destdir="${target.main}"
-			classpathref="libs.main"
-			debug="on"
-			debuglevel="lines,vars,source"
-			encoding="UTF8"/>
+		<javac includeantruntime="false" srcdir="${src.main.java}" destdir="${target.main}" classpathref="libs.main" debug="on" debuglevel="lines,vars,source" encoding="UTF8" />
 	</target>
 
 	<target name="package.main" depends="compile.main">
 		<jar destfile="${kelvin.jar}">
 			<zipfileset dir="${target.main}">
-				<include name="**"/>
+				<include name="**" />
 			</zipfileset>
 			<zipfileset dir="${src.main.resources}">
-				<include name="**"/>
-				<exclude name="config/aop.xml"/>
-			</zipfileset>
-			<zipfileset dir="${src.main.resources}/config" prefix="META-INF">
-				<include name="aop.xml"/>
+				<include name="**" />
+				<exclude name="config/aop.xml" />
 			</zipfileset>
 		</jar>
 	</target>
 
 	<target name="compile.test.server" depends="package.main">
-		<javac
-			includeantruntime="false"
-			srcdir="${src.test.server.java}"
-			destdir="${target.test.server}"
-			classpathref="libs.test.server"
-			debug="on"
-			debuglevel="lines,vars,source"
-			encoding="UTF8"/>
+		<javac includeantruntime="false" srcdir="${src.test.server.java}" destdir="${target.test.server}" classpathref="libs.test.server" debug="on" debuglevel="lines,vars,source" encoding="UTF8" />
 	</target>
 
 	<target name="package.test.server" depends="compile.test.server">
 		<jar destfile="${kelvin-test-server.jar}">
 			<zipfileset dir="${target.test.server}">
-				<include name="**"/>
+				<include name="**" />
+			</zipfileset>
+			<zipfileset dir="${src.test.server.resources}/defaultConfig" prefix="META-INF">
+				<include name="persistence.xml" />
+			</zipfileset>
+			<zipfileset dir="${src.main.resources}/config" prefix="META-INF">
+				<include name="aop.xml" />
 			</zipfileset>
 		</jar>
 	</target>
 
 	<target name="compile.test.client" depends="package.main">
-		<javac
-			includeantruntime="false"
-			srcdir="${src.test.client.java}"
-			destdir="${target.test.client}"
-			classpathref="libs.test.client"
-			debug="on"
-			debuglevel="lines,vars,source"
-			encoding="UTF8"/>
+		<javac includeantruntime="false" srcdir="${src.test.client.java}" destdir="${target.test.client}" classpathref="libs.test.client" debug="on" debuglevel="lines,vars,source" encoding="UTF8" />
 	</target>
 
 	<target name="package.test.client" depends="compile.test.client">
 		<jar destfile="${kelvin-test-client.jar}">
 			<zipfileset dir="${target.test.client}">
-				<include name="**"/>
+				<include name="**" />
 			</zipfileset>
 		</jar>
 	</target>
 
-	<target name="package" depends="package.main, package.test.server, package.test.client"/>
-	
+	<target name="package" depends="package.main, package.test.server, package.test.client" />
+
 	<target name="build-test" depends="package">
 		<tar destfile="${kelvin-test.tar}" longfile="gnu">
-			<tarfileset file="${kelvin.jar}" prefix="${kelvin.name}/lib"/>
-			<tarfileset file="${kelvin-test-server.jar}" prefix="${kelvin.name}/lib"/>
-			<tarfileset file="${src.test.server.resources}/realm.properties" prefix="${kelvin.name}/conf"/>
+			<tarfileset file="${kelvin.jar}" prefix="${kelvin.name}/lib" />
+			<tarfileset file="${kelvin-test-server.jar}" prefix="${kelvin.name}/lib" />
+			<tarfileset file="${src.test.server.resources}/realm.properties" prefix="${kelvin.name}/conf" />
 			<tarfileset dir="${lib}" prefix="${kelvin.name}/lib">
-				<include name="*.jar"/>
+				<include name="*.jar" />
 			</tarfileset>
-			<tarfileset file="${src.main.resources}/scripts/kelvin" filemode="755" username="*" group="*" prefix="${kelvin.name}/bin"/>
+			<tarfileset file="${src.main.resources}/scripts/kelvin" filemode="755" username="*" group="*" prefix="${kelvin.name}/bin" />
 		</tar>
-		<gzip destfile="${kelvin-test.tar.gz}" src="${kelvin-test.tar}"/>
+		<gzip destfile="${kelvin-test.tar.gz}" src="${kelvin-test.tar}" />
 	</target>
 
 	<target name="install-test" depends="build-test">
-		<delete dir="${installed-test}"/>
-		<mkdir dir="${installed-test}"/>
+		<delete dir="${installed-test}" />
+		<mkdir dir="${installed-test}" />
 		<exec executable="tar">
-			<arg line="xzf ${kelvin-test.tar.gz} -C ${target}/installed-test"/>
+			<arg line="xzf ${kelvin-test.tar.gz} -C ${target}/installed-test" />
 		</exec>
 	</target>
 
 	<target name="test" depends="package">
 		<junit fork="true" forkmode="once" showoutput="true" printsummary="on">
-			<jvmarg line="${debug.arg}"/>
-			<jvmarg value="-ea"/>
-			<classpath refid="libs.test.client"/>
-			<formatter type="xml"/>
+			<jvmarg line="${debug.arg}" />
+			<jvmarg value="-ea" />
+			<classpath refid="libs.test.client" />
+			<formatter type="xml" />
 			<batchtest todir="${target.reports}">
 				<zipfileset src="${kelvin-test-client.jar}">
-					<include name="${test.scope}"/>
-					<exclude name="**/Abstract*Test.class"/>
+					<include name="${test.scope}" />	
+					<exclude name="**/Abstract*Test.class" />
 				</zipfileset>
 			</batchtest>
 		</junit>
 		<junitreport todir="${target.reports}">
 			<fileset dir="${target.reports}">
-				<include name="TEST-*.xml"/>
+				<include name="TEST-*.xml" />
 			</fileset>
-			<report format="frames" todir="${target.reports}/html"/>
+			<report format="frames" todir="${target.reports}/html" />
 		</junitreport>
 	</target>
-	
+
 	<target name="clean">
-		<delete dir="${target}"/>
-		<delete dir="${lib}"/>
+		<delete dir="${target}" />
+		<delete dir="${lib}" />
 	</target>
 
 	<target name="clean-ivy">
-		<delete dir="${ivy.cache}"/>
+		<delete dir="${ivy.cache}" />
 	</target>
 
-    <target name="prepare-deploy">
-        <ivy:makepom ivyfile="${basedir}/ivy.xml" pomfile="${pom.xml}" conf="default,runtime">
-            <mapping conf="default" scope="compile"/>
-            <mapping conf="runtime" scope="runtime"/>
-        </ivy:makepom>
-    </target>
+	<target name="prepare-deploy">
+		<ivy:makepom ivyfile="${basedir}/ivy.xml" pomfile="${pom.xml}" conf="default,runtime">
+			<mapping conf="default" scope="compile" />
+			<mapping conf="runtime" scope="runtime" />
+		</ivy:makepom>
+	</target>
 
-    <target name="deploy" depends="prepare-deploy">
-        <artifact:mvn>
-            <arg value="org.apache.maven.plugins:maven-deploy-plugin:2.6:deploy-file" />
-            <arg value="-Durl=${snapshot-repository-url}" />
-            <arg value="-DrepositoryId=${snapshot-repository-id}" />
-            <arg value="-DpomFile=${pom.xml}" />
-            <arg value="-Dfile=${kelvin.jar}" />
-        </artifact:mvn>
-    </target>
+	<target name="deploy" depends="prepare-deploy">
+		<artifact:mvn>
+			<arg value="org.apache.maven.plugins:maven-deploy-plugin:2.6:deploy-file" />
+			<arg value="-Durl=${snapshot-repository-url}" />
+			<arg value="-DrepositoryId=${snapshot-repository-id}" />
+			<arg value="-DpomFile=${pom.xml}" />
+			<arg value="-Dfile=${kelvin.jar}" />
+		</artifact:mvn>
+	</target>
 
-    <target name="stage" depends="prepare-deploy">
-        <!--Staging to release repository goes here-->
-        <!--TODO: Implement-->
-        <!--See: https://docs.sonatype.org/display/Repository/Deploy+Snapshots+and+Stage+Releases+with+Ant-->
-    </target>
+	<target name="stage" depends="prepare-deploy">
+		<!--Staging to release repository goes here-->
+		<!--TODO: Implement-->
+		<!--See: https://docs.sonatype.org/display/Repository/Deploy+Snapshots+and+Stage+Releases+with+Ant-->
+	</target>
 
 </project>

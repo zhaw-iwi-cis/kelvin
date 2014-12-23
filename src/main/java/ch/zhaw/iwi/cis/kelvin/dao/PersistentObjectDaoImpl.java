@@ -41,7 +41,6 @@ public abstract class PersistentObjectDaoImpl implements PersistentObjectDao
 	@SuppressWarnings( "unchecked" )
 	public < T extends PersistentObject > List< T > findByAll( Class< T > clazz )
 	{
-		entityManager = ServiceRegistry.getRegistry().getService( KelvinConfig.getConfig().getPersistenceUnitName() );
 		return entityManager.createQuery( "from " + clazz.getName() ).getResultList();
 	}
 

@@ -16,67 +16,75 @@ import ch.zhaw.iwi.cis.kelvin.test.server.TestService;
 
 public class BasicTest
 {
-	@Ignore
-	//@Test
+	@Test
 	public void test()
 	{
 		KelvinConfig config = KelvinConfig.getConfig();
-		ServiceProxyManager manager = ServiceProxyManager.getServiceProxyManager( config.getTestClientAddress(), config.getTestClientSubject() );
+		ServiceProxyManager manager = ServiceProxyManager.getServiceProxyManager(
+			config.getTestClientAddress(),
+			config.getTestClientSubject() );
 		GlobalService globalService = manager.createServiceProxy( GlobalService.class );
 		globalService.ping();
 	}
-	
-	@Ignore
+
 	@Test
 	public void test2()
 	{
 		KelvinConfig config = KelvinConfig.getConfig();
-		ServiceProxyManager manager = ServiceProxyManager.getServiceProxyManager( config.getTestClientAddress(), config.getTestClientSubject() );
+		ServiceProxyManager manager = ServiceProxyManager.getServiceProxyManager(
+			config.getTestClientAddress(),
+			config.getTestClientSubject() );
 		TestService testService = manager.createServiceProxy( TestService.class );
 		testService.test( new TestClassA( "value1", new TestClassB( "value2" ), new TestClassB( "value3" ) ) );
 		testService.test2( "testing" );
 		testService.test3( Arrays.asList( new String[] { "value1", "value2" } ) );
 	}
-	
+
 	@Test
 	public void testPersist()
 	{
 		KelvinConfig config = KelvinConfig.getConfig();
-		ServiceProxyManager manager = ServiceProxyManager.getServiceProxyManager( config.getTestClientAddress(), config.getTestClientSubject() );
+		ServiceProxyManager manager = ServiceProxyManager.getServiceProxyManager(
+			config.getTestClientAddress(),
+			config.getTestClientSubject() );
 		TestClassAService testService = manager.createServiceProxy( TestClassAService.class );
 
 		TestClassA tcA = new TestClassA( "value1" );
-		testService.persist( tcA);
+		testService.persist( tcA );
 		TestClassA tc2A = new TestClassA( "value2" );
-		testService.persist( tc2A);
+		testService.persist( tc2A );
 		TestClassA tc3A = new TestClassA( "value3" );
-		testService.persist( tc3A);
-		
+		testService.persist( tc3A );
+
 	}
+
 	@Test
 	public void testFindByAll()
 	{
 		KelvinConfig config = KelvinConfig.getConfig();
-		ServiceProxyManager manager = ServiceProxyManager.getServiceProxyManager( config.getTestClientAddress(), config.getTestClientSubject() );
+		ServiceProxyManager manager = ServiceProxyManager.getServiceProxyManager(
+			config.getTestClientAddress(),
+			config.getTestClientSubject() );
 		TestClassAService testService = manager.createServiceProxy( TestClassAService.class );
 
-		List<TestClassA> l = testService.findByAll(TestClassA.class.getName());
-		for(TestClassA tca : l){
-			System.out.println(tca.getClass());
+		List< TestClassA > l = testService.findByAll( TestClassA.class.getName() );
+		for ( TestClassA tca : l )
+		{
+			System.out.println( tca.getClass() );
 		}
-		
+
 	}
-	
-	@Ignore
+
 	@Test
 	public void test3()
 	{
 		KelvinConfig config = KelvinConfig.getConfig();
-		ServiceProxyManager manager = ServiceProxyManager.getServiceProxyManager( config.getTestClientAddress(), config.getTestClientSubject() );
+		ServiceProxyManager manager = ServiceProxyManager.getServiceProxyManager(
+			config.getTestClientAddress(),
+			config.getTestClientSubject() );
 		TestClassAService testService = manager.createServiceProxy( TestClassAService.class );
 
-		
-		testService.findByAll(TestClassA.class.getName());
-		
+		testService.findByAll( TestClassA.class.getName() );
+
 	}
 }
