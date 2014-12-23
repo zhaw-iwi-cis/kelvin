@@ -14,7 +14,7 @@ import ch.zhaw.iwi.cis.kelvin.model.PersistentObject;
 public abstract class PersistentObjectDaoImpl implements PersistentObjectDao
 {
 	private EntityManager entityManager = ServiceRegistry.getRegistry().getService( KelvinConfig.getConfig().getPersistenceUnitName() );
-
+	
 	public < T extends PersistentObject > void persist( T object )
 	{
 		PersistentObject objectMerged = merge( object );
@@ -41,6 +41,7 @@ public abstract class PersistentObjectDaoImpl implements PersistentObjectDao
 	@SuppressWarnings( "unchecked" )
 	public < T extends PersistentObject > List< T > findByAll( Class< T > clazz )
 	{
+		entityManager = ServiceRegistry.getRegistry().getService( KelvinConfig.getConfig().getPersistenceUnitName() );
 		return entityManager.createQuery( "from " + clazz.getName() ).getResultList();
 	}
 

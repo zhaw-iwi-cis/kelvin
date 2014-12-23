@@ -3,166 +3,162 @@
 
 <project name="kelvin" xmlns:ivy="antlib:org.apache.ivy.ant">
 
-	<taskdef resource="net/sf/antcontrib/antlib.xml"/>
-	<taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask" classpath="/opt/local/share/java/apache-ant/lib/ant-junit.jar"/>
+	<taskdef resource="net/sf/antcontrib/antlib.xml" />
+	<taskdef name="junit"
+		classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask"
+		classpath="/opt/local/share/java/apache-ant/lib/ant-junit.jar" />
 
 	<!-- PROPERTIES -->
-	<property name="ivy.cache" location="${user.home}/.ivy2"/>
-	<property name="lib" location="${basedir}/lib"/>
-	<property name="app.name" value="${ant.project.name}"/>
+	<property name="ivy.cache" location="${user.home}/.ivy2" />
+	<property name="lib" location="${basedir}/lib" />
+	<property name="app.name" value="${ant.project.name}" />
 
-	<property name="src" location="${basedir}/src"/>
-	<property name="src.main.java" location="${src}/main/java"/>
-	<property name="src.main.resources" location="${src}/main/resources"/>
-	<property name="src.test.java" location="${src}/test/java"/>
-	<property name="src.test.resources" location="${src}/test/resources"/>
+	<property name="src" location="${basedir}/src" />
+	<property name="src.main.java" location="${src}/main/java" />
+	<property name="src.main.resources" location="${src}/main/resources" />
+	<property name="src.test.java" location="${src}/test/java" />
+	<property name="src.test.resources" location="${src}/test/resources" />
 
-	<property name="target" location="${basedir}/target"/>
-	<property name="target.main" location="${target}/main/classes"/>
-	<property name="target.test" location="${target}/test/classes"/>
-	<property name="target.reports" location="${target}/reports"/>
-	<property name="target.javadoc" location="${target}/javadoc"/>
+	<property name="target" location="${basedir}/target" />
+	<property name="target.main" location="${target}/main/classes" />
+	<property name="target.test" location="${target}/test/classes" />
+	<property name="target.reports" location="${target}/reports" />
+	<property name="target.javadoc" location="${target}/javadoc" />
 
-	<property name="app.jar" location="${target}/${app.name}.jar"/>
-	<property name="app-test.jar" location="${target}/${app.name}-test.jar"/>
-	<property name="app-release.tar" location="${target}/${app.name}-release.tar"/>
-	<property name="app-release.tar.gz" location="${target}/${app.name}-release.tar.gz"/>
+	<property name="app.jar" location="${target}/${app.name}.jar" />
+	<property name="app-test.jar" location="${target}/${app.name}-test.jar" />
+	<property name="app-release.tar" location="${target}/${app.name}-release.tar" />
+	<property name="app-release.tar.gz" location="${target}/${app.name}-release.tar.gz" />
 
 	<!-- VARIABLE (OVERRIDABLE) PROPERTIES -->
-	<property name="test.scope" value="**/*Test.class"/>
-	<property name="debug" value="false"/>
+	<property name="test.scope" value="**/*Test.class" />
+	<property name="debug" value="false" />
 
 	<!-- PATHS -->
-	<path id="app.libs.main"/>
-	<path id="app.libs.test"/>
-		
+	<path id="app.libs.main" />
+	<path id="app.libs.test" />
+
 	<path id="libs.main">
-		<path refid="app.libs.main"/>
+		<path refid="app.libs.main" />
 		<fileset dir="${lib}">
-			<include name="**/*.jar"/>
+			<include name="**/*.jar" />
 		</fileset>
 	</path>
 
 	<path id="libs.test">
-		<path refid="app.libs.test"/>
-		<path refid="libs.main"/>
-		<pathelement location="${app.jar}"/>
-		<pathelement location="${app-test.jar}"/>
+		<path refid="app.libs.test" />
+		<path refid="libs.main" />
+		<pathelement location="${app.jar}" />
+		<pathelement location="${app-test.jar}" />
 	</path>
-	
+
 	<!-- INITIALIZATION -->
 	<target name="init">
-		<mkdir dir="${target.main}"/>
-		<mkdir dir="${target.test}"/>
-		<mkdir dir="${target.reports}"/>
-		<mkdir dir="${target.javadoc}"/>
+		<mkdir dir="${target.main}" />
+		<mkdir dir="${target.test}" />
+		<mkdir dir="${target.reports}" />
+		<mkdir dir="${target.javadoc}" />
 
-        <ivy:retrieve pattern="${lib}/[artifact].[ext]"/>
+		<ivy:retrieve pattern="${lib}/[artifact].[ext]" />
 
 		<tstamp>
-			<format property="DSTAMP" pattern="yyyyMMdd"/>
-			<format property="TSTAMP" pattern="HHmmss"/>
+			<format property="DSTAMP" pattern="yyyyMMdd" />
+			<format property="TSTAMP" pattern="HHmmss" />
 		</tstamp>
 		<tstamp>
-			<format property="tstamp.build" pattern="dd.MM.yyyy HH:mm"/>
+			<format property="tstamp.build" pattern="dd.MM.yyyy HH:mm" />
 		</tstamp>
 		<if>
-			<equals arg1="${debug}" arg2="true"/>
+			<equals arg1="${debug}" arg2="true" />
 			<then>
 				<property name="debug.arg"
-			value="-agentlib:jdwp=transport=dt_socket,address=8001,server=y,suspend=y"/>
+					value="-agentlib:jdwp=transport=dt_socket,address=8001,server=y,suspend=y" />
 			</then>
 			<else>
-				<property name="debug.arg" value=""/>
+				<property name="debug.arg" value="" />
 			</else>
 		</if>
 		<if>
-			<equals arg1="${profile}" arg2="true"/>
+			<equals arg1="${profile}" arg2="true" />
 			<then>
 				<property name="profile.arg"
-			value="-agentpath:/Applications/jprofiler7/bin/macos/libjprofilerti.jnilib"/>
+					value="-agentpath:/Applications/jprofiler7/bin/macos/libjprofilerti.jnilib" />
 			</then>
 			<else>
-				<property name="profile.arg" value=""/>
+				<property name="profile.arg" value="" />
 			</else>
 		</if>
 	</target>
 
 	<!-- COMPILATION -->
 	<target name="compile.main" depends="init">
-		<javac
-			includeantruntime="false"
-			srcdir="${src.main.java}"
-			destdir="${target.main}"
-			classpathref="libs.main"
-			debug="on"
-			debuglevel="lines,vars,source"
-			encoding="UTF8"/>
-			</target>
+		<javac includeantruntime="false" srcdir="${src.main.java}"
+			destdir="${target.main}" classpathref="libs.main" debug="on"
+			debuglevel="lines,vars,source" encoding="UTF8" />
+	</target>
 
 	<target name="compile.test" depends="init">
-		<javac
-			includeantruntime="false"
-			srcdir="${src.test.java}"
-			destdir="${target.test}"
-			classpathref="libs.test"
-			debug="on"
-			debuglevel="lines,vars,source"
-			encoding="UTF8"/>
+		<javac includeantruntime="false" srcdir="${src.test.java}"
+			destdir="${target.test}" classpathref="libs.test" debug="on"
+			debuglevel="lines,vars,source" encoding="UTF8" />
 	</target>
 
 	<!-- RELEASE -->
 	<target name="build-release" depends="package">
 		<unzip src="${lib}/kelvin.jar" dest="${target}">
-		    <patternset>
-		        <include name="scripts/kelvin"/>
-		    </patternset>
+			<patternset>
+				<include name="scripts/kelvin" />
+				<include name="scripts/kelvinWin.bat" />
+			</patternset>
 		</unzip>
-		<move file="${target}/scripts/kelvin" tofile="${target}/scripts/${app.name}"/>
-		<!-- Actual release artifact must be built overridding target
-		     in application script. -->
+
+		<move file="${target}/scripts/kelvin" tofile="${target}/scripts/${app.name}" />
+		<move file="${target}/scripts/kelvinWin.bat" tofile="${target}/scripts/${app.name}.bat" />
+		<!-- Actual release artifact must be built overridding target in application 
+			script. -->
 	</target>
-	
+
 	<target name="install-release" depends="build-release">
-		<delete dir="${target}/installed-release"/>
-		<mkdir dir="${target}/installed-release"/>
+		<delete dir="${target}/installed-release" />
+		<mkdir dir="${target}/installed-release" />
 		<exec executable="tar">
-			<arg line="xzf ${app-release.tar.gz} -C ${target}/installed-release"/>
+			<arg line="xzf ${app-release.tar.gz} -C ${target}/installed-release" />
 		</exec>
 	</target>
-	
+
 	<!-- TESTING -->
 	<target name="test" depends="package">
-		<junit fork="true" forkmode="once" showoutput="true" printsummary="on">
-			<jvmarg line="${debug.arg}"/>
-			<jvmarg line="${profile.arg}"/>
-			<jvmarg value="-ea"/>
-			<classpath refid="libs.test"/>
-			<formatter type="xml"/>
+		<junit fork="true" forkmode="once" showoutput="true"
+			printsummary="on">
+			<jvmarg line="${debug.arg}" />
+			<jvmarg line="${profile.arg}" />
+			<jvmarg value="-ea" />
+			<classpath refid="libs.test" />
+			<formatter type="xml" />
 			<batchtest todir="${target.reports}">
 				<zipfileset src="${app-test.jar}">
-					<include name="${test.scope}"/>
-					<exclude name="**/Abstract*Test.class"/>
+					<include name="${test.scope}" />
+					<exclude name="**/Abstract*Test.class" />
 				</zipfileset>
 			</batchtest>
 		</junit>
 		<junitreport todir="${target.reports}">
 			<fileset dir="${target.reports}">
-				<include name="TEST-*.xml"/>
+				<include name="TEST-*.xml" />
 			</fileset>
-			<report format="frames" todir="${target.reports}/html"/>
+			<report format="frames" todir="${target.reports}/html" />
 		</junitreport>
 	</target>
 
 	<!-- CLEANING -->
 	<target name="clean">
-		<delete dir="${target}"/>
-		<delete dir="${lib}"/>
+		<delete dir="${target}" />
+		<delete dir="${lib}" />
 	</target>
 
 	<target name="clean-ivy">
-		<delete dir="${ivy.cache}"/>
-        <ivy:cleancache/>
+		<delete dir="${ivy.cache}" />
+		<ivy:cleancache />
 	</target>
 
 </project>
