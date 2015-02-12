@@ -54,5 +54,5 @@ public class TestClassA extends PersistentObject
 	public void setTestClassBs( List< TestClassB > testClassBs )
 	{
 		this.testClassBs = testClassBs;
-	 }
+	}
 }
