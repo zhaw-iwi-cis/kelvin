@@ -8,11 +8,6 @@ import ch.zhaw.iwi.cis.kelvin.framework.KelvinConfig;
 @ApplicationConfig
 public class TestConfig extends KelvinConfig
 {
-	public String getPluginDir()
-	{
-		return getApplicationHome() + PLUGIN;
-	}
-
 	@Override
 	public String getApplicationBasePackage()
 	{

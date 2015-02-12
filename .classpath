@@ -2,8 +2,9 @@
 <classpath>
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="src" path="src/test/server/java"/>
+	<classpathentry kind="src" path="src/test/server/resources"/>
 	<classpathentry kind="src" path="src/test/client/java"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="src/test/client/resources"/>
 	<classpathentry kind="lib" path="lib/__commons-configuration.jar"/>
 	<classpathentry kind="lib" path="lib/__commons-io.jar"/>
 	<classpathentry kind="lib" path="lib/__commons-lang.jar"/>

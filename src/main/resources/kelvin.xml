@@ -108,12 +108,12 @@
 		<unzip src="${lib}/kelvin.jar" dest="${target}">
 			<patternset>
 				<include name="scripts/kelvin" />
-				<include name="scripts/kelvinWin.bat" />
+				<include name="scripts/kelvin.bat" />
 			</patternset>
 		</unzip>
 
 		<move file="${target}/scripts/kelvin" tofile="${target}/scripts/${app.name}" />
-		<move file="${target}/scripts/kelvinWin.bat" tofile="${target}/scripts/${app.name}.bat" />
+		<move file="${target}/scripts/kelvin.bat" tofile="${target}/scripts/${app.name}.bat" />
 		<!-- Actual release artifact must be built overridding target in application 
 			script. -->
 	</target>

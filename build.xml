@@ -112,11 +112,14 @@
 	<target name="package.main" depends="compile.main">
 		<jar destfile="${kelvin.jar}">
 			<zipfileset dir="${target.main}">
-				<include name="**" />
+				<include name="**"/>
 			</zipfileset>
 			<zipfileset dir="${src.main.resources}">
 				<include name="**" />
-				<exclude name="config/aop.xml" />
+				<exclude name="config/aop.xml"/>
+			</zipfileset>
+			<zipfileset dir="${src.main.resources}/config" prefix="META-INF">
+				<include name="aop.xml"/>
 			</zipfileset>
 		</jar>
 	</target>
@@ -162,6 +165,7 @@
 				<include name="*.jar" />
 			</tarfileset>
 			<tarfileset file="${src.main.resources}/scripts/kelvin" filemode="755" username="*" group="*" prefix="${kelvin.name}/bin" />
+			<tarfileset file="${src.main.resources}/scripts/kelvin.bat" filemode="755" username="*" group="*" prefix="${kelvin.name}/bin" />
 		</tar>
 		<gzip destfile="${kelvin-test.tar.gz}" src="${kelvin-test.tar}" />
 	</target>
@@ -182,7 +186,7 @@
 			<formatter type="xml" />
 			<batchtest todir="${target.reports}">
 				<zipfileset src="${kelvin-test-client.jar}">
-					<include name="${test.scope}" />	
+					<include name="${test.scope}" />
 					<exclude name="**/Abstract*Test.class" />
 				</zipfileset>
 			</batchtest>

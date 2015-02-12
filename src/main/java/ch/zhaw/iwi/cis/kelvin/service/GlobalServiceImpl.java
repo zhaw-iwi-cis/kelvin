@@ -10,6 +10,7 @@ import ch.zhaw.iwi.cis.kelvin.framework.service.Service;
 @Service( name="GlobalService" )
 public class GlobalServiceImpl implements GlobalService
 {
+	@Override
 	public String shutdown()
 	{
 		KelvinEngine.getEngine().stop();
@@ -17,11 +18,13 @@ public class GlobalServiceImpl implements GlobalService
 		return "shutdown successful";
 	}
 
+	@Override
 	public String ping()
 	{
 		return "ping!";
 	}
 
+	@Override
 	public String showPrincipal()
 	{
 		return "principal=" + KelvinServlet.getServletRequest().getUserPrincipal();
