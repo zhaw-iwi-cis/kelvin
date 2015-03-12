@@ -50,18 +50,13 @@
 	<property name="staging-repository-url" value="http://yama.sml.zhaw.ch/nexus/content/repositories/releases" />
 
 	<!-- VARIABLE (OVERRIDABLE) PROPERTIES -->
-<<<<<<< HEAD
 	<property name="test.scope" value="**/*Test.class" />
 	<property name="debug" value="false" />
-=======
-	<property name="test.scope" value="**/*Test.class"/>
-	<property name="debug" value="false"/>
 	
 	<!-- condition to find out if OS on which script is run is Windows -->
 	<condition property="isWindows">
 	    <os family="windows"/>
 	</condition>
->>>>>>> master
 
 	<path id="libs.main">
 		<fileset dir="${lib}">
@@ -107,14 +102,9 @@
 		<if>
 			<available file="${lib}/INIT-LIBS-FLAG" />
 			<else>
-<<<<<<< HEAD
 				<mkdir dir="${lib}" />
 				<touch file="${lib}/INIT-LIBS-FLAG" />
 				<ivy:retrieve pattern="${lib}/[artifact].[ext]" conf="default" />
-=======
-				<mkdir dir="${lib}"/>
-				<touch file="${lib}/INIT-LIBS-FLAG"/>
-				<ivy:retrieve pattern="${lib}/[artifact].[ext]" conf="default"/>
 				
 				<!-- deflecting java rt requires different -jar argument for windows -->
 				<if>
@@ -235,7 +225,6 @@
 				    </args>
 				</run-deflector>
 				 -->
->>>>>>> master
 			</else>
 		</if>
 	</target>
@@ -389,8 +378,4 @@
 		<!--See: https://docs.sonatype.org/display/Repository/Deploy+Snapshots+and+Stage+Releases+with+Ant-->
 	</target>
 
-<<<<<<< HEAD
 </project>
-=======
-</project>
->>>>>>> master
