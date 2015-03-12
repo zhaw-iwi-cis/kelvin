@@ -50,8 +50,18 @@
 	<property name="staging-repository-url" value="http://yama.sml.zhaw.ch/nexus/content/repositories/releases" />
 
 	<!-- VARIABLE (OVERRIDABLE) PROPERTIES -->
+<<<<<<< HEAD
 	<property name="test.scope" value="**/*Test.class" />
 	<property name="debug" value="false" />
+=======
+	<property name="test.scope" value="**/*Test.class"/>
+	<property name="debug" value="false"/>
+	
+	<!-- condition to find out if OS on which script is run is Windows -->
+	<condition property="isWindows">
+	    <os family="windows"/>
+	</condition>
+>>>>>>> master
 
 	<path id="libs.main">
 		<fileset dir="${lib}">
@@ -69,15 +79,163 @@
 		<path refid="libs.test.server" />
 		<pathelement location="${kelvin-test-client.jar}" />
 	</path>
+	
+	<!-- macrodefs for running deflector, including OS-switch -->
+	<macrodef name="run-deflector">
+	    <element name="args"/> 
+		<sequential>
+	    	<if>
+			    <equals arg1="${isWindows}" arg2="true"/>
+			    <then>
+			        <exec executable="cmd">
+			            <arg value="/c"/>
+			            <arg value="deflector.bat"/>
+			            <args/>
+			        </exec>
+			    </then>
+			    <else>
+			        <exec executable="deflector">
+			            <args/>
+			        </exec>
+			    </else>
+			</if>	
+		</sequential>    
+	</macrodef>
 
 	<target name="init-libs">
 		<!--TODO: move deflector generation to standalone project and add as dependency -->
 		<if>
 			<available file="${lib}/INIT-LIBS-FLAG" />
 			<else>
+<<<<<<< HEAD
 				<mkdir dir="${lib}" />
 				<touch file="${lib}/INIT-LIBS-FLAG" />
 				<ivy:retrieve pattern="${lib}/[artifact].[ext]" conf="default" />
+=======
+				<mkdir dir="${lib}"/>
+				<touch file="${lib}/INIT-LIBS-FLAG"/>
+				<ivy:retrieve pattern="${lib}/[artifact].[ext]" conf="default"/>
+				
+				<!-- deflecting java rt requires different -jar argument for windows -->
+				<if>
+			    	<equals arg1="${isWindows}" arg2="true"/>
+			    	<then>
+			    	    <run-deflector>
+			    	        <args>
+			    	            <arg line="-jar &quot;${java.home}/lib/rt.jar&quot;"/>
+								<arg line="-includes java\..* javax\..* org\.ietf\..* org\.omg\..* org\.w3c\..* org\.xml\..*"/>
+								<arg line="-excludes javax\.smartcardio\..* org\.omg\.stub\.javax\..* java\.awt\.peer\..*"/>
+								<arg line="-output ${lib}"/>
+			    	        </args>
+			    	    </run-deflector>
+			    	</then>
+			    	<else>
+			    	    <run-deflector>
+			    	        <args>
+						        <arg line="-jar ${java.home}/lib/rt.jar"/>
+								<arg line="-includes java\..* javax\..* org\.ietf\..* org\.omg\..* org\.w3c\..* org\.xml\..*"/>
+								<arg line="-excludes javax\.smartcardio\..* org\.omg\.stub\.javax\..* java\.awt\.peer\..*"/>
+								<arg line="-output ${lib}"/>
+						    </args>
+			    	    </run-deflector>
+			    	</else>
+				</if>
+				
+				<!-- generate deflected classes -->
+				<run-deflector>
+					<args>
+					    <arg line="-jar ${lib}/javax.servlet-api.jar"/>
+						<arg line="-classpath ${lib}/__rt.jar"/>
+						<arg line="-output ${lib}"/>
+					</args>
+				</run-deflector>
+				<run-deflector>
+				    <args>
+				        <arg line="-jar ${lib}/derby.jar"/>
+						<arg line="-classpath ${lib}/__rt.jar"/>
+						<arg line="-includes org\.apache\.derby\.agg\..* org\.apache\.derby\.authentication\..* org\.apache\.derby\.catalog\..* org\.apache\.derby\.jdbc\..* org\.apache\.derby\.mbeans\..* org\.apache\.derby\.security\..* org\.apache\.derby\.tools\..* org\.apache\.derby\.vti\..* org\.apache\.derby\.iapi\.error\..*"/>
+						<arg line="-output ${lib}"/>
+				    </args>
+				</run-deflector>
+				<run-deflector>
+				    <args>
+				        <arg line="-jar ${lib}/derbynet.jar"/>
+						<arg line="-classpath ${lib}/__rt.jar:${lib}/__javax.servlet-api.jar:${lib}/javax.servlet-api.jar"/>
+						<arg line="-includes org\.apache\.derby\.drda\..* org\.apache\.derby\.mbeans\..*"/>
+						<arg line="-output ${lib}"/>
+				    </args>
+				</run-deflector>
+				<run-deflector>
+				    <args>
+				        <arg line="-jar ${lib}/jetty-server.jar"/>
+						<arg line="-classpath ${lib}/__rt.jar:${lib}/__javax.servlet-api.jar:${lib}/javax.servlet-api.jar:${lib}/jetty-http.jar:${lib}/jetty-util.jar:${lib}/jetty-io.jar"/>
+						<arg line="-includes org\.eclipse\.jetty\.server\..*"/>
+						<arg line="-excludes .*\.jmx\..*"/>
+						<arg line="-output ${lib}"/>
+				    </args>
+				</run-deflector>
+				<run-deflector>
+				    <args>
+				        <arg line="-jar ${lib}/jetty-util.jar"/>
+						<arg line="-classpath ${lib}/__rt.jar:${lib}/slf4j-api.jar:${lib}/__javax.servlet-api.jar:${lib}/javax.servlet-api.jar"/>
+						<arg line="-includes org\.eclipse\.jetty\.util\..*"/>
+						<arg line="-excludes .*\.jmx\..*"/>
+						<arg line="-output ${lib}"/>
+				    </args>
+				</run-deflector>
+				<run-deflector>
+				    <args>
+				        <arg line="-javaVersion 1.4"/>
+						<arg line="-jar ${lib}/commons-lang.jar"/>
+						<arg line="-classpath ${lib}/__rt.jar"/>
+						<arg line="-includes org\.apache\.commons\.lang\..*"/>
+						<arg line="-output ${lib}"/>
+				    </args>
+				</run-deflector>
+				<run-deflector>
+				    <args>
+				        <arg line="-jar ${lib}/commons-configuration.jar"/>
+						<arg line="-classpath ${lib}/__rt.jar:${lib}/commons-logging.jar:${lib}/commons-beanutils.jar:${lib}/commons-collections.jar:${lib}/commons-digester.jar:${lib}/commons-jexl.jar:${lib}/commons-vfs2.jar:${lib}/xml-resolver.jar:${lib}/commons-jxpath.jar:${lib}/__javax.servlet-api.jar:${lib}/javax.servlet-api.jar:${lib}/__commons-lang.jar:${lib}/commons-lang.jar"/>
+						<arg line="-includes org\.apache\.commons\.configuration\..*"/>
+						<arg line="-output ${lib}"/>
+				    </args>
+				</run-deflector>
+				<run-deflector>
+				    <args>
+				        <arg line="-jar ${lib}/commons-io.jar"/>
+						<arg line="-classpath ${lib}/__rt.jar"/>
+						<arg line="-includes org\.apache\.commons\.io\..*"/>
+						<arg line="-output ${lib}"/>
+				    </args>
+				</run-deflector>
+				<run-deflector>
+				    <args>
+				        <arg line="-jar ${lib}/jackson-core.jar"/>
+						<arg line="-classpath ${lib}/__rt.jar"/>
+						<arg line="-includes com\.fasterxml\.jackson\.core\..*"/>
+						<arg line="-output ${lib}"/>
+				    </args>
+				</run-deflector>
+				<run-deflector>
+				    <args>
+				        <arg line="-jar ${lib}/jackson-annotations.jar"/>
+						<arg line="-classpath ${lib}/__rt.jar"/>
+						<arg line="-includes com\.fasterxml\.jackson\.annotation\..*"/>
+						<arg line="-output ${lib}"/>
+				    </args>
+				</run-deflector>
+				
+				<!-- TODO Deflector is running into problems compiling this; see if this is a bug
+				<run-deflector>
+				    <args>
+				        <arg line="-jar ${lib}/jackson-databind.jar"/>
+						<arg line="-classpath ${lib}/__rt.jar:${lib}/jackson-core.jar:${lib}/__jackson-core.jar:${lib}/jackson-annotations.jar"/>
+						<arg line="-includes com\.fasterxml\.jackson\.databind\..*"/>
+						<arg line="-output ${lib}"/>
+				    </args>
+				</run-deflector>
+				 -->
+>>>>>>> master
 			</else>
 		</if>
 	</target>
@@ -231,4 +389,8 @@
 		<!--See: https://docs.sonatype.org/display/Repository/Deploy+Snapshots+and+Stage+Releases+with+Ant-->
 	</target>
 
+<<<<<<< HEAD
 </project>
+=======
+</project>
+>>>>>>> master
