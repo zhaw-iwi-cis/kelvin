@@ -1,7 +1,10 @@
 package ch.zhaw.iwi.cis.kelvin.service;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
+import __java.lang.__Class;
 import ch.zhaw.iwi.cis.kelvin.dao.PersistentObjectDao;
 import ch.zhaw.iwi.cis.kelvin.model.ObjectID;
 import ch.zhaw.iwi.cis.kelvin.model.PersistentObject;
@@ -25,6 +28,15 @@ public abstract class PersistentObjectServiceImpl implements PersistentObjectSer
 	public < T extends PersistentObject > T findByID( ObjectID id )
 	{
 		return getPersistentObjectObjectDao().findById( id );
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public < T extends PersistentObject > List< T > findByAll( String className ) {
+		Class< PersistentObject > theClass = (Class< PersistentObject >)__Class.forName( null, className );
+		List< T > results = (List< T >)getPersistentObjectObjectDao().findByAll( theClass );
+		
+		return results;
 	}
 	
 	protected abstract PersistentObjectDao getPersistentObjectObjectDao();

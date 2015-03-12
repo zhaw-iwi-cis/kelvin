@@ -15,6 +15,12 @@ public class TestConfig extends KelvinConfig
 	}
 
 	@Override
+	public String getPersistenceUnitName()
+	{
+		return "kelvinTestServer";
+	}
+
+	@Override
 	public InetSocketAddress getTestClientAddress()
 	{
 		return new InetSocketAddress( DEFAULT_TEST_CLIENT_HOSTNAME, DEFAULT_TEST_CLIENT_PORT_WITH_PROXY );

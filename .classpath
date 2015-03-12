@@ -83,6 +83,5 @@
 	<classpathentry kind="lib" path="lib/slf4j-jdk14.jar"/>
 	<classpathentry kind="lib" path="lib/validation-api.jar"/>
 	<classpathentry kind="lib" path="lib/xml-apis.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
