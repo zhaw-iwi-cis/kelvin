@@ -1,3 +1,5 @@
+<!-- TODO: clean this up. is ivysettings.xml needed if we pull from macen central directly? -->
+
 <ivysettings>
     <settings defaultResolver="iwi-chain"/>
     <!--<credentials host="localhost"-->
@@ -11,9 +13,8 @@
               value="http://yama.sml.zhaw.ch/nexus/content/repositories/releases/"/>
     <resolvers>
         <chain name="iwi-chain">
-            <ibiblio name="nexus-snapshots" m2compatible="true" root="${nexus-snapshots}"/>
-            <ibiblio name="nexus-releases" m2compatible="true" root="${nexus-releases}"/>
-            <ibiblio name="nexus" m2compatible="true" root="${nexus-public}"/>
+            <ibiblio name="maven2" m2compatible="true"/>
+            <ibiblio name="maven" m2compatible="true"/>
         </chain>
     </resolvers>
 </ivysettings>
