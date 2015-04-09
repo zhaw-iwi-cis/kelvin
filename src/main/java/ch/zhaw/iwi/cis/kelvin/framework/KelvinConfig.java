@@ -63,7 +63,7 @@ public abstract class KelvinConfig
 		return getApplicationHome() + LOG;
 	}
 	
-	public final String getWebDir()
+	public String getWebDir()
 	{
 		// TODO Make webBase configuration dependent: alternative is ""
 		String webBase = "/../../../src";
